@@ -1,0 +1,13 @@
+:root {
+    --purple: #17082aff;
+    --yellow: #f79e44ff;
+    --violet: #6644b8ff;
+    --black: #0c0f0aff;
+    --white: #fefefe;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
