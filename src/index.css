@@ -1,8 +1,8 @@
 :root {
-    --purple: #17082aff;
-    --yellow: #f79e44ff;
-    --violet: #6644b8ff;
-    --black: #0c0f0aff;
+    --purple: #17082a;
+    --yellow: #f79e44;
+    --violet: #6644b8;
+    --black: #0c0f0a;
     --white: #fefefe;
 }
 
@@ -10,4 +10,22 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    color: var(--white);
+    font-family: "Poppins", sans-serif;
 }
+
+h1,
+h2 {
+    font-family: "Merriweather Sans", sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: red;
+}
+
+a:hover, a:hover > *, .active {
+    color: var(--yellow);
+    fill: var(--yellow) !important;
+}
+
