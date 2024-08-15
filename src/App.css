@@ -1,10 +1,4 @@
 .container {
     background: var(--black);
-    min-height: calc(100vh - 63px);
-}
-
-@media (min-width: 470px) {
-    .container {
-        min-height: 100vh;
-    }
+    min-height: 100vh;
 }

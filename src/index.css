@@ -21,7 +21,6 @@ h2 {
 
 a {
     text-decoration: none;
-    color: red;
 }
 
 a:hover, a:hover > *, .active {

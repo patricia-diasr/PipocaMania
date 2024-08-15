@@ -1,7 +1,7 @@
 .menu ul {
     width: 100%;
     height: 63px;
-    position: absolute;
+    position: fixed;
     z-index: 10;
     bottom: 0;
     left: 0;
