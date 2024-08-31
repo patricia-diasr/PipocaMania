@@ -1,7 +1,7 @@
 import "./Modal.css";
 import { useState } from "react";
 
-function Modal() {
+function Modal({ children }) {
     const [show, setShow] = useState(true);
 
     const toggleModal = () => {
@@ -9,8 +9,9 @@ function Modal() {
     };
 
     return (
-        <div className={`overlay ${show ? "show" : ""}`}>
-            <div className={`modal ${show ? "show" : ""}`}>
+        <div className={`overlay ${show ? "show" : ""}`} onClick={toggleModal}>
+            <div className={`modal ${show ? "show" : ""}`} onClick={(e) => e.stopPropagation()}>
+                {children}
             </div>
         </div>
     );
