@@ -1,0 +1,26 @@
+.submenu {
+    padding: 0 1em;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+.submenu .items {
+    display: flex;
+    gap: 1.5em;
+    border-bottom: 1px solid #D9D9D9;
+}
+
+.submenu .items a {
+    font-size: 1.2em;
+    padding: .5em;
+}
+
+.submenu .items a.active {
+    box-shadow: 0 2px 0 0 var(--yellow);
+}
+
+@media (min-width: 900px) {
+    .submenu {
+        padding: 0 2em;
+    }
+}

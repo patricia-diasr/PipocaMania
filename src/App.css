@@ -1,4 +1,11 @@
 .container {
     background: var(--black);
     min-height: 100vh;
+    padding-bottom: 63px;
+}
+
+@media (min-width: 470px) {
+    .container {
+        padding-bottom: 0;
+    }
 }

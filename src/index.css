@@ -28,3 +28,7 @@ a:hover, a:hover > *, .active {
     fill: var(--yellow) !important;
 }
 
+body {
+    background: var(--black);
+}
+

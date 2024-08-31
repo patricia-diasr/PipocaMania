@@ -1,0 +1,166 @@
+.movie-detail {
+    padding: 1.2em 1em;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+.movie-detail section {
+    margin: 2em 0;
+}
+
+.movie-detail h2 {
+    margin-bottom: 0.2em;
+}
+
+.movie-detail .options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.5em 0;
+}
+
+.movie-detail .options .icon {
+    font-size: 1.5em;
+    margin: 0.1em;
+}
+
+.movie-detail .film-creators {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.movie-detail .film-creator {
+    max-width: 50%;
+    padding: 0.5em;
+}
+
+.movie-detail .film-creator .name {
+    font-weight: bold;
+}
+
+.movie-detail .info-box {
+    background: var(--purple);
+    padding: 1.5em;
+    border-radius: 1em;
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: flex-start;
+    gap: 2.5em;
+}
+
+.movie-detail .info-line {
+    display: flex;
+    align-items: center;
+}
+
+.movie-detail .icon {
+    font-size: 1.2em;
+}
+
+.movie-detail .info .icon {
+    fill: var(--yellow);
+}
+
+.movie-detail .info p {
+    font-size: 1.2em;
+    color: var(--yellow);
+    margin-left: 0.5em;
+}
+
+.movie-detail .info p strong {
+    font-weight: normal;
+    color: var(--white);
+}
+
+.movie-detail .cast .people {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: start;
+    gap: 1.25em;
+    margin-top: 0.5em;
+}
+
+.movie-detail .cast img {
+    width: 6.25rem;
+    height: 6.25rem;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.movie-detail .cast .name {
+    font-weight: bold;
+}
+
+.movie-detail .comment {
+    background: var(--purple);
+    padding: 1em;
+    border-radius: 1em;
+    margin-bottom: 1em;
+}
+
+.movie-detail .comment .line {
+    display: flex;
+    justify-content: space-between;
+}
+
+.movie-detail .comment .name {
+    font-weight: bold;
+}
+
+.movie-detail .comment .icon {
+    font-size: 1em;
+    margin: 0 0.1em;
+}
+
+.movie-detail .comment .description {
+    margin-top: 0.5em;
+    font-weight: 300;
+}
+
+@media (min-width: 900px) {
+    .movie-detail {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+        grid-template-rows: auto auto auto auto auto;
+        column-gap: 3em;
+        padding: 1.2em 2em;
+    }
+
+    .movie-detail .about {
+        grid-row: 1/3;
+        grid-column: 1;
+        margin: 0.5em !important;
+    }
+
+    .movie-detail .film-creators {
+        grid-column: 1;
+    }
+
+    .movie-detail .options {
+        grid-row: 1;
+        grid-column: 2;
+    }
+
+    .movie-detail .info {
+        grid-row: 2 / -1;
+        grid-column: 2;
+        margin: 0.5em !important;
+    }
+
+    .movie-detail .comments {
+        grid-column: 1;
+    }
+
+    .movie-detail .cast {
+        grid-column: 1;
+    }
+
+    .movie-detail .comment .icon {
+        font-size: 1.4em;
+    }
+}
