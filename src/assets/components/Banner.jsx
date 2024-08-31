@@ -1,7 +1,14 @@
-import "./Button.css";
+import Poster from "../images/poster-filme.jpg";
 
-function Button({ text }) {
-    return <button className="button">{text}</button>;
+import "./Banner.css";
+
+function Banner() {
+    return (
+        <div className="banner">
+            <h2>Star Wars: Ep VIII</h2>
+            <img src={Poster} alt="Poster filme" />
+        </div>
+    );
 }
 
-export default Button;
+export default Banner;

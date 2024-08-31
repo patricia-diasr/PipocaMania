@@ -1,11 +1,18 @@
 import "./App.css";
 
-import Login from "./assets/components/Login.jsx";
+import MovieList from "./assets/components/MovieList.jsx";
+import Header from "./assets/components/Header.jsx";
+import Menu from "./assets/components/Menu.jsx";
+
+import Banner from "./assets/components/Banner.jsx";
 
 function App() {
     return (
         <div className="container">
-            <Login />
+            <Header />
+            <Menu />
+            <Banner />
+            <MovieList />
         </div>
     );
 }
