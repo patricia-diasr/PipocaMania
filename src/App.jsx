@@ -1,6 +1,6 @@
 import "./App.css";
 
-import MovieList from "./assets/components/MovieList.jsx";
+import MovieDetail from "./assets/components/MovieDetail.jsx";
 import Header from "./assets/components/Header.jsx";
 import Menu from "./assets/components/Menu.jsx";
 
@@ -12,7 +12,7 @@ function App() {
             <Header />
             <Menu />
             <Banner />
-            <MovieList />
+            <MovieDetail />
         </div>
     );
 }

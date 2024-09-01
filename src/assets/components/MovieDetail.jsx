@@ -3,16 +3,18 @@ import "./MovieDetail.css";
 import { BsBookmark } from "react-icons/bs";
 import { BsStar } from "react-icons/bs";
 
+import ReactStars from "react-rating-stars-component";
+
 function MovieDetail() {
+    const ratingChanged = (newRating) => {
+        console.log(newRating);
+    };
+
     return (
         <div className="movie-detail">
             <section className="options">
                 <div className="stars">
-                    <BsStar className="icon" />
-                    <BsStar className="icon" />
-                    <BsStar className="icon" />
-                    <BsStar className="icon" />
-                    <BsStar className="icon" />
+                    <ReactStars count={5} isHalf={true} onChange={ratingChanged} size={35} activeColor="#ffd700" />
                 </div>
                 <BsBookmark className="icon" />
             </section>
@@ -124,11 +126,14 @@ function MovieDetail() {
                     <div className="line">
                         <p className="name">Lorem Impsum</p>
                         <div className="stars">
-                            <BsStar className="icon" />
-                            <BsStar className="icon" />
-                            <BsStar className="icon" />
-                            <BsStar className="icon" />
-                            <BsStar className="icon" />
+                            <ReactStars
+                                count={5}
+                                value={5}
+                                edit={false}
+                                isHalf={true}
+                                size={25}
+                                activeColor="#ffd700"
+                            />
                         </div>
                     </div>
                     <p className="description">
@@ -139,11 +144,14 @@ function MovieDetail() {
                     <div className="line">
                         <p className="name">Lorem Impsum</p>
                         <div className="stars">
-                            <BsStar className="icon" />
-                            <BsStar className="icon" />
-                            <BsStar className="icon" />
-                            <BsStar className="icon" />
-                            <BsStar className="icon" />
+                            <ReactStars
+                                count={5}
+                                value={3.5}
+                                edit={false}
+                                isHalf={true}
+                                size={25}
+                                activeColor="#ffd700"
+                            />
                         </div>
                     </div>
                     <p className="description">

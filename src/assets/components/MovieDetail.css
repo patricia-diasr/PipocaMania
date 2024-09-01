@@ -19,6 +19,10 @@
     margin: 0.5em 0;
 }
 
+.movie-detail .options .stars{
+    margin-right: .5em;
+}
+
 .movie-detail .options .icon {
     font-size: 1.5em;
     margin: 0.1em;
@@ -112,13 +116,7 @@
     font-weight: bold;
 }
 
-.movie-detail .comment .icon {
-    font-size: 1em;
-    margin: 0 0.1em;
-}
-
 .movie-detail .comment .description {
-    margin-top: 0.5em;
     font-weight: 300;
 }
 
@@ -160,7 +158,5 @@
         grid-column: 1;
     }
 
-    .movie-detail .comment .icon {
-        font-size: 1.4em;
-    }
+    
 }
