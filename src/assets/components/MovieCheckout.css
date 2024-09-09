@@ -1,0 +1,155 @@
+.movie-checkout {
+    padding: 1.2em 1em;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.movie-checkout section {
+    margin: 2em 0;
+}
+
+.movie-checkout h2 {
+    margin-bottom: 0.2em;
+    width: 100%;
+}
+
+.movie-checkout select {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: var(--purple);
+    color: var(--white);
+    border-radius: 1em;
+    border: 0.6em solid var(--purple);
+    border-left: 1em solid var(--purple);
+    border-right: 1em solid var(--purple);
+}
+
+.select-time {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.session-type {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    margin-bottom: 1em;
+}
+
+.session-type p {
+    width: 100%;
+}
+
+.session-type input[type="radio"] {
+    display: none;
+}
+
+.session-type label {
+    margin: 0.5em 0;
+}
+.session-type span {
+    padding: 0.3em 0.6em;
+    border: 3px solid var(--violet);
+    color: var(--violet);
+    border-radius: 0.8em;
+    font-weight: 500;
+}
+
+.session-type input[type="radio"]:checked + span {
+    color: var(--yellow);
+    border: 3px solid var(--yellow);
+}
+
+.select-sits .sitmap {
+    width: 100%;
+    height: 25em;
+    background: var(--purple);
+    border-radius: 1em;
+    margin: 1em 0;
+}
+
+.select-tickets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 3em;
+}
+
+.ticket-type {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.2em;
+}
+
+.ticket-type h3 {
+    font-weight: normal;
+}
+
+.input-number {
+    display: flex;
+    align-items: center;
+}
+
+.input-number span {
+    width: 2em;
+    color: var(--yellow);
+    border-top: 3px solid var(--violet);
+    border-bottom: 3px solid var(--violet);
+    background: transparent;
+    text-align: center;
+    font-size: 1.4em;
+}
+
+.input-number button {
+    color: var(--yellow);
+    background: transparent;
+    font-weight: bold;
+    outline: none;
+    border: 3px solid var(--violet);
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    border-radius: 0 1.5em 1.5em 0;
+    font-size: 1.4em;
+    padding: 0 0.3em;
+}
+
+.input-number button:first-child {
+    border-radius: 1.5em 0 0 1.5em;
+}
+
+.input-number button:active {
+    border: 3px solid var(--yellow);
+}
+
+.movie-checkout > button {
+    display: block;
+    margin: 2em 0 1em 0;
+    width: 100%;
+    padding: 0.5em;
+    background-color: var(--violet);
+    border: none;
+    border-radius: 2em;
+    cursor: pointer;
+    font-size: 1.1em;
+}
+
+.movie-checkout > button:hover {
+    background: var(--yellow);
+}
+
+@media (min-width: 768px) {
+    .movie-checkout {
+        display: grid;
+        grid-template-columns: 3fr 2fr;
+        grid-template-rows: auto auto auto;
+        gap: 0 2em;
+    }
+
+    .select-sits {
+        grid-column: 2;
+        grid-row: 1/4;
+    }
+}
