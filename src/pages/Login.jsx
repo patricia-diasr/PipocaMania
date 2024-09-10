@@ -1,12 +1,13 @@
 import styles from "./Login.module.css";
 
-import { useEffect } from 'react';
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 function Login() {
     useEffect(() => {
-        document.body.style.overflow = 'hidden'
-    })
-    
+        document.body.style.overflow = "hidden";
+    });
+
     return (
         <div className={styles.login}>
             <div className={styles.loginContainer}>
@@ -23,7 +24,7 @@ function Login() {
 
                         <button type="submit">Entrar</button>
                     </form>
-                    <a href="#">Não tem cadastro? Registre-se aqui</a>
+                    <Link to="/signin">Não tem cadastro? Registre-se aqui</Link>
                 </div>
             </div>
         </div>

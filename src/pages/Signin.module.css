@@ -12,7 +12,7 @@
     border-radius: 30px 30px 0 0;
 }
 
-.signContent {
+.signinContent {
     width: 100%;
     height: 100%;
     padding: 2em;
@@ -21,20 +21,20 @@
     justify-content: center;
 }
 
-.signContent h2 {
+.signinContent h2 {
     text-align: center;
     font-size: 1.5em;
 }
 
-.signContent label {
+.signinContent label {
     display: block;
     margin-bottom: 0.5em;
     margin-top: 1em;
     font-weight: bold;
 }
 
-.signContent input[type="text"],
-.signContent input[type="password"] {
+.signinContent input[type="text"],
+.signinContent input[type="password"] {
     width: 100%;
     padding: 0.8em 1em;
     margin-bottom: 0.2em;
@@ -45,19 +45,19 @@
     transition: 0.3s ease;
 }
 
-.signContent input[type="text"]:focus,
-.signContent input[type="password"]:focus {
+.signinContent input[type="text"]:focus,
+.signinContent input[type="password"]:focus {
     border: 3px solid var(--yellow);
     outline: none;
 }
 
-.signContent span {
+.signinContent span {
     margin-left: 0.8em;
     color: var(--yellow);
     font-weight: light;
 }
 
-.signContent button {
+.signinContent button {
     display: block;
     margin: 2em 0 1em 0;
     width: 100%;
@@ -69,11 +69,11 @@
     font-size: 1.1em;
 }
 
-.signContent button:hover {
+.signinContent button:hover {
     background: var(--yellow);
 }
 
-.signContent a {
+.signinContent a {
     text-align: center;
 }
 
@@ -89,7 +89,7 @@
         height: 500px;
     }
 
-    .signContent {
+    .signinContent {
         padding: 3em 5em;
     }
 }

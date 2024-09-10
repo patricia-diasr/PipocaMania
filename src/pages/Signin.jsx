@@ -1,11 +1,12 @@
-import styles from "./Sign.module.css";
+import styles from "./Signin.module.css";
 
-import { useEffect } from 'react';
+import { useEffect } from "react";
+import { Link } from 'react-router-dom';
 
 function signin() {
     useEffect(() => {
-        document.body.style.overflow = 'hidden'
-    })
+        document.body.style.overflow = "hidden";
+    });
 
     return (
         <div className={styles.signin}>
@@ -23,7 +24,7 @@ function signin() {
 
                         <button type="submit">Cadastrar</button>
                     </form>
-                    <a href="#">Já possuí cadastro? Faça login aqui</a>
+                    <Link to="/login">Já possuí cadastro? Faça login aqui</Link>
                 </div>
             </div>
         </div>
