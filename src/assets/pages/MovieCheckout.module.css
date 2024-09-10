@@ -1,19 +1,23 @@
-.movie-checkout {
+.movieCheckout {
     padding: 1.2em 1em;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-.movie-checkout section {
+.movieCheckout section {
     margin: 2em 0;
 }
 
-.movie-checkout h2 {
+.movieCheckout h2 {
     margin-bottom: 0.2em;
     width: 100%;
 }
 
-.movie-checkout select {
+.movieCheckout h3 {
+    font-weight: normal;
+}
+
+.movieCheckout select {
     width: 100%;
     border: 0;
     outline: 0;
@@ -25,43 +29,45 @@
     border-right: 1em solid var(--purple);
 }
 
-.select-time {
+.selectTime {
     display: flex;
     flex-wrap: wrap;
 }
 
-.session-type {
+.sessionType {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5em;
     margin-bottom: 1em;
 }
 
-.session-type p {
+.sessionType h3 {
     width: 100%;
 }
 
-.session-type input[type="radio"] {
+.sessionType input[type="radio"] {
     display: none;
 }
 
-.session-type label {
+.sessionType label {
     margin: 0.5em 0;
 }
-.session-type span {
+
+.sessionType span {
     padding: 0.3em 0.6em;
     border: 3px solid var(--violet);
     color: var(--violet);
     border-radius: 0.8em;
     font-weight: 500;
+    font-size: 1.3em;
 }
 
-.session-type input[type="radio"]:checked + span {
+.sessionType input[type="radio"]:checked + span {
     color: var(--yellow);
     border: 3px solid var(--yellow);
 }
 
-.select-sits .sitmap {
+.selectSits .sitmap {
     width: 100%;
     height: 25em;
     background: var(--purple);
@@ -69,13 +75,13 @@
     margin: 1em 0;
 }
 
-.select-tickets {
+.selectTickets {
     display: flex;
     flex-wrap: wrap;
     gap: 0 3em;
 }
 
-.ticket-type {
+.ticketType {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -83,16 +89,12 @@
     gap: 0.2em;
 }
 
-.ticket-type h3 {
-    font-weight: normal;
-}
-
-.input-number {
+.inputNumber {
     display: flex;
     align-items: center;
 }
 
-.input-number span {
+.inputNumber span {
     width: 2em;
     color: var(--yellow);
     border-top: 3px solid var(--violet);
@@ -102,7 +104,7 @@
     font-size: 1.4em;
 }
 
-.input-number button {
+.inputNumber button {
     color: var(--yellow);
     background: transparent;
     font-weight: bold;
@@ -116,15 +118,15 @@
     padding: 0 0.3em;
 }
 
-.input-number button:first-child {
+.inputNumber button:first-child {
     border-radius: 1.5em 0 0 1.5em;
 }
 
-.input-number button:active {
+.inputNumber button:active {
     border: 3px solid var(--yellow);
 }
 
-.movie-checkout > button {
+.movieCheckout > button {
     display: block;
     margin: 2em 0 1em 0;
     width: 100%;
@@ -136,19 +138,19 @@
     font-size: 1.1em;
 }
 
-.movie-checkout > button:hover {
+.movieCheckout > button:hover {
     background: var(--yellow);
 }
 
 @media (min-width: 768px) {
-    .movie-checkout {
+    .movieCheckout {
         display: grid;
         grid-template-columns: 3fr 2fr;
         grid-template-rows: auto auto auto;
         gap: 0 2em;
     }
 
-    .select-sits {
+    .selectSits {
         grid-column: 2;
         grid-row: 1/4;
     }

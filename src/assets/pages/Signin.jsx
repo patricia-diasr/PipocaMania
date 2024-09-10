@@ -1,4 +1,4 @@
-import "./signin.css";
+import styles from "./Sign.module.css";
 
 import { useEffect } from 'react';
 
@@ -8,9 +8,9 @@ function signin() {
     })
 
     return (
-        <div className="signin">
-            <div className="signin-container">
-                <div className="signin-content">
+        <div className={styles.signin}>
+            <div className={styles.signinContainer}>
+                <div className={styles.signinContent}>
                     <h2>Faça seu cadastro</h2>
                     <form>
                         <label htmlFor="username">User Name</label>

@@ -1,4 +1,4 @@
-import "./MovieDetail.css";
+import styles from "./MovieDetail.module.css";
 
 import { BsBookmark } from "react-icons/bs";
 import { BsStar } from "react-icons/bs";
@@ -11,15 +11,15 @@ function MovieDetail() {
     };
 
     return (
-        <div className="movie-detail">
-            <section className="options">
-                <div className="stars">
+        <div className={styles.movieDetail}>
+            <section className={styles.options}>
+                <div className={styles.stars}>
                     <ReactStars count={5} isHalf={true} onChange={ratingChanged} size={35} activeColor="#ffd700" />
                 </div>
-                <BsBookmark className="icon" />
+                <BsBookmark className={styles.icon} />
             </section>
 
-            <section className="about">
+            <section className={styles.about}>
                 <h2>Sinopse</h2>
                 <p>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde neque, voluptate distinctio blanditiis
@@ -28,104 +28,104 @@ function MovieDetail() {
                 </p>
             </section>
 
-            <section className="film-creators">
-                <div className="film-creator">
-                    <p className="name">Lorem Impsum</p>
-                    <p className="job">Dolor sit amet</p>
+            <section className={styles.filmCreators}>
+                <div className={styles.filmCreator}>
+                    <p className={styles.name}>Lorem Impsum</p>
+                    <p className={styles.job}>Dolor sit amet</p>
                 </div>
-                <div className="film-creator">
-                    <p className="name">Lorem Impsum Adisplicins Elit</p>
-                    <p className="job">Dolor sit amet</p>
+                <div className={styles.filmCreator}>
+                    <p className={styles.name}>Lorem Impsum Adisplicins Elit</p>
+                    <p className={styles.job}>Dolor sit amet</p>
                 </div>
-                <div className="film-creator">
-                    <p className="name">Lorem Impsum</p>
-                    <p className="job">Dolor sit amet</p>
-                </div>
-            </section>
-
-            <section className="info">
-                <div className="info-box">
-                    <div className="info-line">
-                        <BsStar className="icon" />
-                        <p>
-                            <strong>Lançamento:</strong> 2024
-                        </p>
-                    </div>
-
-                    <div className="info-line">
-                        <BsStar className="icon" />
-                        <p>
-                            <strong>Lançamento:</strong> 2024
-                        </p>
-                    </div>
-
-                    <div className="info-line">
-                        <BsStar className="icon" />
-                        <p>
-                            <strong>Lançamento:</strong> 2024
-                        </p>
-                    </div>
-
-                    <div className="info-line">
-                        <BsStar className="icon" />
-                        <p>
-                            <strong>Lançamento:</strong> 2024
-                        </p>
-                    </div>
-
-                    <div className="info-line">
-                        <BsStar className="icon" />
-                        <p>
-                            <strong>Lançamento:</strong> 2024
-                        </p>
-                    </div>
+                <div className={styles.filmCreator}>
+                    <p className={styles.name}>Lorem Impsum</p>
+                    <p className={styles.job}>Dolor sit amet</p>
                 </div>
             </section>
 
-            <section className="cast">
+            <section className={styles.info}>
+                <div className={styles.infoBox}>
+                    <div className={styles.infoLine}>
+                        <BsStar className={styles.icon} />
+                        <p>
+                            <strong>Lançamento:</strong> 2024
+                        </p>
+                    </div>
+
+                    <div className={styles.infoLine}>
+                        <BsStar className={styles.icon} />
+                        <p>
+                            <strong>Lançamento:</strong> 2024
+                        </p>
+                    </div>
+
+                    <div className={styles.infoLine}>
+                        <BsStar className={styles.icon} />
+                        <p>
+                            <strong>Lançamento:</strong> 2024
+                        </p>
+                    </div>
+
+                    <div className={styles.infoLine}>
+                        <BsStar className={styles.icon} />
+                        <p>
+                            <strong>Lançamento:</strong> 2024
+                        </p>
+                    </div>
+
+                    <div className={styles.infoLine}>
+                        <BsStar className={styles.icon} />
+                        <p>
+                            <strong>Lançamento:</strong> 2024
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section className={styles.cast}>
                 <h2>Elenco</h2>
-                <div className="people">
-                    <div className="person">
+                <div className={styles.people}>
+                    <div className={styles.person}>
                         <img
                             src="https://plus.unsplash.com/premium_photo-1667811951673-3b3e8d6742c7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                             alt=""
                         />
-                        <p className="name">Lorem Impsum</p>
-                        <p className="job">Lorem Impsum</p>
+                        <p className={styles.name}>Lorem Impsum</p>
+                        <p className={styles.job}>Lorem Impsum</p>
                     </div>
-                    <div className="person">
+                    <div className={styles.person}>
                         <img
                             src="https://plus.unsplash.com/premium_photo-1667811951673-3b3e8d6742c7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                             alt=""
                         />
-                        <p className="name">Lorem Impsum</p>
-                        <p className="job">Lorem Impsum</p>
+                        <p className={styles.name}>Lorem Impsum</p>
+                        <p className={styles.job}>Lorem Impsum</p>
                     </div>
-                    <div className="person">
+                    <div className={styles.person}>
                         <img
                             src="https://plus.unsplash.com/premium_photo-1667811951673-3b3e8d6742c7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                             alt=""
                         />
-                        <p className="name">Lorem Impsum</p>
-                        <p className="job">Lorem Impsum</p>
+                        <p className={styles.name}>Lorem Impsum</p>
+                        <p className={styles.job}>Lorem Impsum</p>
                     </div>
-                    <div className="person">
+                    <div className={styles.person}>
                         <img
                             src="https://plus.unsplash.com/premium_photo-1667811951673-3b3e8d6742c7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                             alt=""
                         />
-                        <p className="name">Lorem Impsum</p>
-                        <p className="job">Lorem Impsum</p>
+                        <p className={styles.name}>Lorem Impsum</p>
+                        <p className={styles.job}>Lorem Impsum</p>
                     </div>
                 </div>
             </section>
 
-            <section className="comments">
+            <section className={styles.comments}>
                 <h2>Avaliações</h2>
-                <div className="comment">
-                    <div className="line">
-                        <p className="name">Lorem Impsum</p>
-                        <div className="stars">
+                <div className={styles.comment}>
+                    <div className={styles.line}>
+                        <p className={styles.name}>Lorem Impsum</p>
+                        <div className={styles.stars}>
                             <ReactStars
                                 count={5}
                                 value={5}
@@ -136,14 +136,14 @@ function MovieDetail() {
                             />
                         </div>
                     </div>
-                    <p className="description">
+                    <p className={styles.description}>
                         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Amet consectetur adipisicing elit.
                     </p>
                 </div>
-                <div className="comment">
-                    <div className="line">
-                        <p className="name">Lorem Impsum</p>
-                        <div className="stars">
+                <div className={styles.comment}>
+                    <div className={styles.line}>
+                        <p className={styles.name}>Lorem Impsum</p>
+                        <div className={styles.stars}>
                             <ReactStars
                                 count={5}
                                 value={3.5}
@@ -154,7 +154,7 @@ function MovieDetail() {
                             />
                         </div>
                     </div>
-                    <p className="description">
+                    <p className={styles.description}>
                         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Amet consectetur adipisicing elit.
                     </p>
                 </div>

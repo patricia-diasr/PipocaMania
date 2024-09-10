@@ -1,4 +1,4 @@
-import "./Login.css";
+import styles from "./Login.module.css";
 
 import { useEffect } from 'react';
 
@@ -8,9 +8,9 @@ function Login() {
     })
     
     return (
-        <div className="login">
-            <div className="login-container">
-                <div className="login-content">
+        <div className={styles.login}>
+            <div className={styles.loginContainer}>
+                <div className={styles.loginContent}>
                     <h2>Faça seu login</h2>
                     <form>
                         <label htmlFor="username">User Name</label>

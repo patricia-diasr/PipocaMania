@@ -1,18 +1,18 @@
-import "./MovieCheckout.css";
+import styles from "./MovieCheckout.module.css";
 
 function MovieCheckout() {
     return (
-        <div className="movie-checkout">
-            <section className="select-day">
+        <div className={styles.movieCheckout}>
+            <section className={styles.selectDay}>
                 <h2>Selecione o dia</h2>
                 <select name="date">
                     <option value="">Selecione a data</option>
                 </select>
             </section>
-            <section className="select-time">
+            <section className={styles.selectTime}>
                 <h2>Selecione o horário</h2>
-                <div className="session-type">
-                    <p>2D - Dublado</p>
+                <div className={styles.sessionType}>
+                    <h3>2D - Dublado</h3>
                     <label>
                         <input type="radio" name="time" value="19:00" />
                         <span>19:00</span>
@@ -22,8 +22,8 @@ function MovieCheckout() {
                         <span>21:00</span>
                     </label>
                 </div>
-                <div className="session-type">
-                    <p>2D - Legendado</p>
+                <div className={styles.sessionType}>
+                    <h3>2D - Legendado</h3>
                     <label>
                         <input type="radio" name="time" value="19:00" />
                         <span>19:00</span>
@@ -34,30 +34,30 @@ function MovieCheckout() {
                     </label>
                 </div>
             </section>
-            <section className="select-sits">
+            <section className={styles.selectSits}>
                 <h2>Selecione os assentos</h2>
-                <div className="sitmap"></div>
+                <div className={styles.sitmap}></div>
             </section>
-            <section className="select-tickets">
+            <section className={styles.selectTickets}>
                 <h2>Selecione os ingressos</h2>
-                <div className="ticket-type">
+                <div className={styles.ticketType}>
                     <h3>Inteiras</h3>
-                    <div className="input-number">
+                    <div className={styles.inputNumber}>
                         <button>-</button>
                         <span>0</span>
                         <button>+</button>
                     </div>
-                    <p className="price">R$ 30,00</p>
+                    <p className={styles.price}>R$ 30,00</p>
                 </div>
 
-                <div className="ticket-type">
+                <div className={styles.ticketType}>
                     <h3>Meia Entrada</h3>
-                    <div className="input-number">
+                    <div className={styles.inputNumber}>
                         <button>-</button>
                         <span>0</span>
                         <button>+</button>
                     </div>
-                    <p className="price">R$ 15,00</p>
+                    <p className={styles.price}>R$ 15,00</p>
                 </div>
             </section>
             <button type="submit">Aplicar</button>

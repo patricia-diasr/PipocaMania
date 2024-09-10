@@ -1,18 +1,18 @@
-.login {
+.signin {
     width: 100%;
     height: 100vh;
     display: flex;
     align-items: flex-end;
 }
 
-.login-container {
+.signinContainer {
     background: var(--purple);
     width: 100%;
     height: 70vh;
     border-radius: 30px 30px 0 0;
 }
 
-.login-content {
+.signContent {
     width: 100%;
     height: 100%;
     padding: 2em;
@@ -21,20 +21,20 @@
     justify-content: center;
 }
 
-.login-content h2 {
+.signContent h2 {
     text-align: center;
     font-size: 1.5em;
 }
 
-.login-content label {
+.signContent label {
     display: block;
     margin-bottom: 0.5em;
     margin-top: 1em;
     font-weight: bold;
 }
 
-.login-content input[type="text"],
-.login-content input[type="password"] {
+.signContent input[type="text"],
+.signContent input[type="password"] {
     width: 100%;
     padding: 0.8em 1em;
     margin-bottom: 0.2em;
@@ -45,19 +45,19 @@
     transition: 0.3s ease;
 }
 
-.login-content input[type="text"]:focus,
-.login-content input[type="password"]:focus {
+.signContent input[type="text"]:focus,
+.signContent input[type="password"]:focus {
     border: 3px solid var(--yellow);
     outline: none;
 }
 
-.login-content span {
+.signContent span {
     margin-left: 0.8em;
     color: var(--yellow);
     font-weight: light;
 }
 
-.login-content button {
+.signContent button {
     display: block;
     margin: 2em 0 1em 0;
     width: 100%;
@@ -69,27 +69,27 @@
     font-size: 1.1em;
 }
 
-.login-content button:hover {
+.signContent button:hover {
     background: var(--yellow);
 }
 
-.login-content a {
+.signContent a {
     text-align: center;
 }
 
 @media (min-width: 470px) {
-    .login {
+    .signin {
         justify-content: center;
         align-items: center;
     }
 
-    .login-container {
+    .signinContainer {
         border-radius: 30px;
         width: 600px;
         height: 500px;
     }
 
-    .login-content {
+    .signContent {
         padding: 3em 5em;
     }
 }

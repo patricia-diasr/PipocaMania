@@ -1,4 +1,4 @@
-import "./Modal.css";
+import styles from "./Modal.module.css";
 import { useState } from "react";
 
 function Modal({ children }) {
@@ -9,8 +9,8 @@ function Modal({ children }) {
     };
 
     return (
-        <div className={`overlay ${show ? "show" : ""}`} onClick={toggleModal}>
-            <div className={`modal ${show ? "show" : ""}`} onClick={(e) => e.stopPropagation()}>
+        <div className={`${styles.overlay} ${show ? styles.show : ""}`} onClick={toggleModal}>
+            <div className={`${styles.modal} ${show ? styles.show : ""}`} onClick={(e) => e.stopPropagation()}>
                 {children}
             </div>
         </div>
