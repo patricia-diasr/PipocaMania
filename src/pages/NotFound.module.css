@@ -1,0 +1,18 @@
+.notfound {
+    padding: 2em;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+}
+
+.notfound h1 {
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.notfound a {
+    font-size: 1.5em;
+}

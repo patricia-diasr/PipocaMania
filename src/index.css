@@ -23,7 +23,7 @@ a {
     text-decoration: none;
 }
 
-a:hover, a:hover > *, .active {
+a:hover, a:hover > *, .active * {
     color: var(--yellow);
     fill: var(--yellow) !important;
 }

@@ -1,6 +1,6 @@
-import { BsBookmarkFill } from "react-icons/bs";
-import { BsFillTicketPerforatedFill } from "react-icons/bs";
-import { BsHouseFill } from "react-icons/bs";
+import React from "react";
+import { NavLink } from "react-router-dom";
+import { BsBookmarkFill, BsFillTicketPerforatedFill, BsHouseFill } from "react-icons/bs";
 
 import styles from "./Menu.module.css";
 
@@ -9,22 +9,22 @@ function Menu() {
         <nav className={styles.menu}>
             <ul>
                 <li>
-                    <a href="#">
+                    <NavLink to="/home" className={({ isActive }) => (isActive ? "active" : "")}>
                         <span>Home</span>
                         <BsHouseFill className={styles.icon} />
-                    </a>
+                    </NavLink>
                 </li>
                 <li>
-                    <a href="#">
+                    <NavLink to="/tickets" className={({ isActive }) => (isActive ? "active" : "")}>
                         <span>Ingressos</span>
                         <BsFillTicketPerforatedFill className={styles.icon} />
-                    </a>
+                    </NavLink>
                 </li>
                 <li>
-                    <a href="#">
+                    <NavLink to="/lists" className={({ isActive }) => (isActive ? "active" : "")}>
                         <span>Minhas Listas</span>
                         <BsBookmarkFill className={styles.icon} />
-                    </a>
+                    </NavLink>
                 </li>
             </ul>
         </nav>

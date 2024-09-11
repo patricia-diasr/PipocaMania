@@ -1,4 +1,4 @@
-import Poster from "../images/poster-filme.jpg";
+import Poster from "../assets/images/poster-filme.jpg";
 import styles from "./Banner.module.css";
 
 function Banner() {

@@ -3,7 +3,7 @@ import styles from "./Signin.module.css";
 import { useEffect } from "react";
 import { Link } from 'react-router-dom';
 
-function signin() {
+function Signin() {
     useEffect(() => {
         document.body.style.overflow = "hidden";
     });
@@ -31,4 +31,4 @@ function signin() {
     );
 }
 
-export default signin;
+export default Signin;

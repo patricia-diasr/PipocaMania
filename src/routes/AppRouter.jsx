@@ -1,38 +1,45 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
-import PrivateRoute from "./privateRoute";
+import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from "react-router-dom";
 
 import Login from "../pages/Login";
 import Signin from "../pages/Signin";
-
+import Movie from "../pages/Movie";
+import MovieDetail from "../pages/MovieDetail";
+import MovieCheckout from "../pages/MovieCheckout";
+import NotFound from "../pages/NotFound"; 
 import Header from "../components/Header";
 import Menu from "../components/Menu";
+
+function AppLayout() {
+    return (
+        <>
+            <Header />
+            <Menu />
+            <main>
+                <Outlet />
+            </main>
+        </>
+    );
+}
 
 function AppRouter() {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<Login />} />
+                <Route path="/" element={<Navigate to="/movie" />} />
+
                 <Route path="/login" element={<Login />} />
                 <Route path="/signin" element={<Signin />} />
 
-                <Route element={<PrivateRoute />}>
-                    <Route
-                        element={
-                            <>
-                                <Header />
-                                <Menu />
-                                <main>
-                                    <Outlet />
-                                </main>
-                            </>
-                        }
-                    >
-                        {/* <Route path="/profile" element={<ProfilePage />} /> */}
+                <Route element={<AppLayout />}>
+                    <Route path="movie" element={<Movie />}>
+                        <Route index element={<Navigate to="detail" />} />
+                        <Route path="detail" element={<MovieDetail />} />
+                        <Route path="checkout" element={<MovieCheckout />} />
                     </Route>
                 </Route>
 
-                {/* <Route path="*" element={<NotFoundPage />} /> */}
+                <Route path="*" element={<NotFound />} />
             </Routes>
         </Router>
     );
