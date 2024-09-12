@@ -7,7 +7,6 @@ header {
     align-items: center;
     justify-content: space-between;
     background: var(--purple);
-    background: linear-gradient(0deg, rgba(23, 8, 42, 0.65) 0%, rgba(23, 8, 42, 1) 100%);
     padding: 10px 15px;
 }
 

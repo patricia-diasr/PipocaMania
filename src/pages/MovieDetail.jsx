@@ -1,15 +1,75 @@
 import styles from "./MovieDetail.module.css";
 
-import { BsBookmark } from "react-icons/bs";
-import { BsStar } from "react-icons/bs";
+import { BsBookmark, BsCalendar, BsCurrencyDollar, BsBarChart, BsClock, BsStar } from "react-icons/bs";
 
 import ReactStars from "react-rating-stars-component";
+import useMovieDetails from "../hooks/useMovieDetails";
 
 function MovieDetail() {
-    const ratingChanged = (newRating) => {
+    const { movieDetails, movieCredits, error, loading } = useMovieDetails("1022789");
+    function ratingChanged(newRating) {
         console.log(newRating);
+    }
+
+    if (loading) {
+        return <div>Carregando...</div>;
+    }
+
+    if (error) {
+        return <div>Erro: {error}</div>;
+    }
+
+    if (!movieDetails) {
+        return <div>Detalhes do filme não encontrados.</div>;
+    }
+
+    const crewMap = new Map();
+    movieCredits.crew.forEach((member) => {
+        if (["Director", "Characters", "Writer"].includes(member.job)) {
+            if (crewMap.has(member.name)) {
+                crewMap.get(member.name).push(member.job);
+            } else {
+                crewMap.set(member.name, [member.job]);
+            }
+        }
+    });
+
+    const filmCreators = Array.from(crewMap, ([name, jobs]) => ({ name, jobs }));
+
+    const formatCurrency = (amount) => {
+        const currencySymbol = 'US$';
+        
+        if (amount >= 1_000_000_000) {
+            return `${currencySymbol}${(amount / 1_000_000_000).toFixed(1)}B`;
+        } else if (amount >= 1_000_000) {
+            return `${currencySymbol}${(amount / 1_000_000).toFixed(1)}M`;
+        } else if (amount >= 1_000) {
+            return `${currencySymbol}${(amount / 1_000).toFixed(1)}K`;
+        } else {
+            return `${currencySymbol}${amount.toLocaleString()}`;
+        }
+    };
+    
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return new Intl.DateTimeFormat('pt-BR', {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+        }).format(date);
     };
 
+    function formatRuntime(minutes) {
+        const hours = Math.floor(minutes / 60);
+        const mins = minutes % 60;
+        return `${hours}h ${mins}m`;
+    };
+    
+    function formatVote(vote) {
+        const votePorcent = Math.floor(vote * 10);
+        return `${votePorcent}%`;
+    };
+    
     return (
         <div className={styles.movieDetail}>
             <section className={styles.options}>
@@ -20,27 +80,18 @@ function MovieDetail() {
             </section>
 
             <section className={styles.about}>
+                <h1>{movieDetails.title}</h1>
                 <h2>Sinopse</h2>
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde neque, voluptate distinctio blanditiis
-                    soluta explicabo dolores, voluptates tempora nostrum asperiores quibusdam molestiae voluptatibus
-                    odit. Tempore voluptas nesciunt sed exercitationem laboriosam.
-                </p>
+                <p>{movieDetails.overview}</p>
             </section>
 
             <section className={styles.filmCreators}>
-                <div className={styles.filmCreator}>
-                    <p className={styles.name}>Lorem Impsum</p>
-                    <p className={styles.job}>Dolor sit amet</p>
-                </div>
-                <div className={styles.filmCreator}>
-                    <p className={styles.name}>Lorem Impsum Adisplicins Elit</p>
-                    <p className={styles.job}>Dolor sit amet</p>
-                </div>
-                <div className={styles.filmCreator}>
-                    <p className={styles.name}>Lorem Impsum</p>
-                    <p className={styles.job}>Dolor sit amet</p>
-                </div>
+                {filmCreators.map((member) => (
+                    <div key={member.id} className={styles.filmCreator}>
+                        <p className={styles.name}>{member.name}</p>
+                        <p className={styles.job}>{member.jobs.join(", ")}</p>
+                    </div>
+                ))}
             </section>
 
             <section className={styles.info}>
@@ -48,35 +99,35 @@ function MovieDetail() {
                     <div className={styles.infoLine}>
                         <BsStar className={styles.icon} />
                         <p>
-                            <strong>Lançamento:</strong> 2024
+                            <strong>Avaliação:</strong> {formatVote(movieDetails.vote_average)}
                         </p>
                     </div>
 
                     <div className={styles.infoLine}>
-                        <BsStar className={styles.icon} />
+                        <BsClock className={styles.icon} />
                         <p>
-                            <strong>Lançamento:</strong> 2024
+                            <strong>Duração:</strong> {formatRuntime(movieDetails.runtime)}
                         </p>
                     </div>
 
                     <div className={styles.infoLine}>
-                        <BsStar className={styles.icon} />
+                        <BsCalendar className={styles.icon} />
                         <p>
-                            <strong>Lançamento:</strong> 2024
+                            <strong>Lançamento:</strong> {formatDate(movieDetails.release_date)}
                         </p>
                     </div>
 
                     <div className={styles.infoLine}>
-                        <BsStar className={styles.icon} />
+                        <BsCurrencyDollar className={styles.icon} />
                         <p>
-                            <strong>Lançamento:</strong> 2024
+                            <strong>Orçamento:</strong> {formatCurrency(movieDetails.budget)}
                         </p>
                     </div>
 
                     <div className={styles.infoLine}>
-                        <BsStar className={styles.icon} />
+                        <BsBarChart className={styles.icon} />
                         <p>
-                            <strong>Lançamento:</strong> 2024
+                            <strong>Receita:</strong> {formatCurrency(movieDetails.revenue)}
                         </p>
                     </div>
                 </div>
@@ -85,38 +136,13 @@ function MovieDetail() {
             <section className={styles.cast}>
                 <h2>Elenco</h2>
                 <div className={styles.people}>
-                    <div className={styles.person}>
-                        <img
-                            src="https://plus.unsplash.com/premium_photo-1667811951673-3b3e8d6742c7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            alt=""
-                        />
-                        <p className={styles.name}>Lorem Impsum</p>
-                        <p className={styles.job}>Lorem Impsum</p>
-                    </div>
-                    <div className={styles.person}>
-                        <img
-                            src="https://plus.unsplash.com/premium_photo-1667811951673-3b3e8d6742c7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            alt=""
-                        />
-                        <p className={styles.name}>Lorem Impsum</p>
-                        <p className={styles.job}>Lorem Impsum</p>
-                    </div>
-                    <div className={styles.person}>
-                        <img
-                            src="https://plus.unsplash.com/premium_photo-1667811951673-3b3e8d6742c7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            alt=""
-                        />
-                        <p className={styles.name}>Lorem Impsum</p>
-                        <p className={styles.job}>Lorem Impsum</p>
-                    </div>
-                    <div className={styles.person}>
-                        <img
-                            src="https://plus.unsplash.com/premium_photo-1667811951673-3b3e8d6742c7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            alt=""
-                        />
-                        <p className={styles.name}>Lorem Impsum</p>
-                        <p className={styles.job}>Lorem Impsum</p>
-                    </div>
+                    {movieCredits?.cast.slice(0, 6).map((person) => (
+                        <div key={person.id} className={styles.person}>
+                            <img src={`https://image.tmdb.org/t/p/w185${person.profile_path}`} alt={person.name} />
+                            <p className={styles.name}>{person.name}</p>
+                            <p className={styles.job}>{person.character}</p>
+                        </div>
+                    ))}
                 </div>
             </section>
 

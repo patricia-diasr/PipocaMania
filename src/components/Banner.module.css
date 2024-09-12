@@ -1,35 +1,21 @@
 .banner {
     width: 100%;
-    height: 45vh;
-    display: flex;
-    align-items: end;
-    padding: 10px 20px;
-    background: linear-gradient(0deg, rgba(12,15,10,0.7) 10%, rgba(12,15,10,0.1) 60%);
-}
-
-.banner h2 {
-    text-transform: uppercase;
-    font-size: 2.5em;
-    z-index: 5;
+    height: 56.25vw;
+    margin-top: 62px;
+    max-height: 70vh;
 }
 
 .banner img {
     width: 100%;
-    height: 45vh;
+    height: 56.25vw;
+    max-height: 70vh;
     object-fit: cover;
-    object-position: center center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 470px) {
     .banner {
-        padding: 20px 40px;
-    }
-    
-    .banner h2 {
-        font-size: 3em;
+        margin-top: 90px;
     }
 }
+
+

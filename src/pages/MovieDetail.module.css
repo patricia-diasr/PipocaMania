@@ -8,6 +8,11 @@
     margin: 2em 0;
 }
 
+.movieDetail h1 {
+    font-size: 1.8em;
+    margin-bottom: 1em;
+}
+
 .movieDetail h2 {
     margin-bottom: 0.2em;
 }
@@ -30,8 +35,8 @@
 
 .movieDetail .filmCreators {
     display: flex;
-    justify-content: space-between;
     flex-wrap: wrap;
+    gap: 1em;
 }
 
 .movieDetail .filmCreator {
@@ -59,6 +64,7 @@
 .movieDetail .infoLine {
     display: flex;
     align-items: center;
+    width: 280px;
 }
 
 .movieDetail .icon {
@@ -83,7 +89,6 @@
 .movieDetail .cast .people {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
     justify-content: start;
     gap: 1.25em;
     margin-top: 0.5em;
@@ -98,6 +103,11 @@
 
 .movieDetail .cast .name {
     font-weight: bold;
+    width: 8em;
+}
+
+.movieDetail .cast .job {
+    width: 8em;
 }
 
 .movieDetail .comment {
@@ -121,6 +131,10 @@
 }
 
 @media (min-width: 900px) {
+    .movieDetail h1 {
+        font-size: 2em;
+    }
+
     .movieDetail {
         display: grid;
         grid-template-columns: 3fr 1fr;

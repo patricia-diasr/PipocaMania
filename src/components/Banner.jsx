@@ -1,11 +1,9 @@
-import Poster from "../assets/images/poster-filme.jpg";
 import styles from "./Banner.module.css";
 
 function Banner() {
     return (
         <div className={styles.banner}>
-            <h2>Star Wars: Ep VIII</h2>
-            <img src={Poster} alt="Poster filme" />
+            <img src="https://image.tmdb.org/t/p/original/stKGOm8UyhuLPR9sZLjs5AkmncA.jpg" alt="Poster filme" />
         </div>
     );
 }
