@@ -86,8 +86,8 @@ function MovieDetail() {
             </section>
 
             <section className={styles.filmCreators}>
-                {filmCreators.map((member) => (
-                    <div key={member.id} className={styles.filmCreator}>
+                {filmCreators.map((member, index) => (
+                    <div key={index} className={styles.filmCreator}>
                         <p className={styles.name}>{member.name}</p>
                         <p className={styles.job}>{member.jobs.join(", ")}</p>
                     </div>
@@ -136,8 +136,8 @@ function MovieDetail() {
             <section className={styles.cast}>
                 <h2>Elenco</h2>
                 <div className={styles.people}>
-                    {movieCredits?.cast.slice(0, 6).map((person) => (
-                        <div key={person.id} className={styles.person}>
+                    {movieCredits?.cast.slice(0, 6).map((person, index) => (
+                        <div key={index} className={styles.person}>
                             <img src={`https://image.tmdb.org/t/p/w185${person.profile_path}`} alt={person.name} />
                             <p className={styles.name}>{person.name}</p>
                             <p className={styles.job}>{person.character}</p>

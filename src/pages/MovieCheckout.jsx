@@ -1,10 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styles from "./MovieCheckout.module.css";
+import Seatmap from "../components/Seatmap";
+import seatingDatabase from "../data/seatingDatabase";
 
 function MovieCheckout() {
     const [selectedDate, setSelectedDate] = useState("");
     const [selectedTime, setSelectedTime] = useState("");
     const [tickets, setTickets] = useState({ full: 0, half: 0 });
+    const [seatingData, setSeatingData] = useState(seatingDatabase);
+    const [selectedSeats, setSelectedSeats] = useState([]);
+
 
     const handleDateChange = (e) => setSelectedDate(e.target.value);
     const handleTimeChange = (e) => setSelectedTime(e.target.value);
@@ -14,6 +19,26 @@ function MovieCheckout() {
                 action === "increment" ? prevTickets[type] + 1 : prevTickets[type] > 0 ? prevTickets[type] - 1 : 0;
             return { ...prevTickets, [type]: newValue };
         });
+    };
+
+    const handleSeatSelection = (seat) => {
+        if (seat.status === 'booked') return;
+
+        setSeatingData((prevSeats) => 
+            prevSeats.map((row, rowIndex) => 
+                row.map((s, seatIndex) => 
+                    s && s.position === seat.position 
+                        ? { ...s, status: selectedSeats.includes(seat.position) ? 'available' : 'selected' }
+                        : s
+                )
+            )
+        );
+
+        setSelectedSeats((prevSeats) => 
+            prevSeats.includes(seat.position) 
+                ? prevSeats.filter((pos) => pos !== seat.position) 
+                : [...prevSeats, seat.position]
+        );
     };
 
     const handleSubmit = (e) => {
@@ -27,11 +52,12 @@ function MovieCheckout() {
             date: selectedDate,
             time: selectedTime,
             tickets,
+            selectedSeats
         };
         console.log("Reserva:", reservation);
     };
 
-    const isFormValid = selectedDate && selectedTime && (tickets.full > 0 || tickets.half > 0);
+    const isFormValid = selectedDate && selectedTime && (tickets.full > 0 || tickets.half > 0) && (tickets.half + tickets. full === selectedSeats.length);
 
     return (
         <form onSubmit={handleSubmit} className={styles.movieCheckout}>
@@ -94,7 +120,7 @@ function MovieCheckout() {
             </section>
             <section className={styles.selectSits}>
                 <h2>Selecione os assentos</h2>
-                <div className={styles.sitmap}></div>
+                <Seatmap seatingData={seatingData} onSeatSelect={handleSeatSelection} />
             </section>
             <section className={styles.selectTickets}>
                 <h2>Selecione os ingressos</h2>
@@ -126,7 +152,9 @@ function MovieCheckout() {
                     <p className={styles.price}>R$ 15,00</p>
                 </div>
             </section>
-            <button type="submit" disabled={!isFormValid}>Aplicar</button>
+            <button type="submit" disabled={!isFormValid}>
+                Aplicar
+            </button>
         </form>
     );
 }

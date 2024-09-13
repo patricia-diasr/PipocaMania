@@ -1,0 +1,100 @@
+.seatmap {
+    background: var(--purple);
+    padding: 0.5em;
+    border-radius: 1em;
+}
+
+.seatmap .room {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.seatmap .row {
+    display: flex;
+    gap: 5px;
+}
+
+.seat {
+    width: 30px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+}
+
+.seat.available {
+    background: var(--violet);
+    cursor: pointer;
+}
+
+.seat.available:hover {
+    background: var(--yellow);
+}
+
+.seat.booked {
+    background: #4e4d4d;
+}
+
+.seat.selected {
+    cursor: pointer;
+    background: var(--yellow);
+}
+
+.emptySeat {
+    width: 5px;
+    height: 5px;
+}
+
+@media (min-width: 400px) {
+    .seatmap {
+        padding: 1em;
+    }
+
+    .seatmap .room {
+        gap: 8px;
+    }
+    
+    .seatmap .row {
+        gap: 8px;
+    }
+
+    .emptySeat {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+
+@media (min-width: 440px) {
+    .seatmap {
+        padding: 1em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .seatmap .room {
+        gap: 10px;
+    }
+    
+    .seatmap .row {
+        gap: 10px;
+    }
+}
+
+@media (min-width: 550px) {
+    .seat {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (min-width: 750px) {
+    .seat {
+        width: 30px;
+        height: 30px;
+    }
+}
