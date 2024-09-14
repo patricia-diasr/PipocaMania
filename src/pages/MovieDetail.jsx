@@ -6,7 +6,7 @@ import ReactStars from "react-rating-stars-component";
 import useMovieDetails from "../hooks/useMovieDetails";
 
 function MovieDetail() {
-    const { movieDetails, movieCredits, error, loading } = useMovieDetails("1022789");
+    const { movieDetails, movieCredits, movieComments, error, loading } = useMovieDetails("1022789");
     function ratingChanged(newRating) {
         console.log(newRating);
     }
@@ -23,6 +23,10 @@ function MovieDetail() {
         return <div>Detalhes do filme não encontrados.</div>;
     }
 
+    if (!movieComments) {
+        return <div>Comentarios do filme não encontrados.</div>;
+    }
+
     const crewMap = new Map();
     movieCredits.crew.forEach((member) => {
         if (["Director", "Characters", "Writer"].includes(member.job)) {
@@ -37,8 +41,8 @@ function MovieDetail() {
     const filmCreators = Array.from(crewMap, ([name, jobs]) => ({ name, jobs }));
 
     const formatCurrency = (amount) => {
-        const currencySymbol = 'US$';
-        
+        const currencySymbol = "US$";
+
         if (amount >= 1_000_000_000) {
             return `${currencySymbol}${(amount / 1_000_000_000).toFixed(1)}B`;
         } else if (amount >= 1_000_000) {
@@ -49,27 +53,27 @@ function MovieDetail() {
             return `${currencySymbol}${amount.toLocaleString()}`;
         }
     };
-    
+
     function formatDate(dateString) {
         const date = new Date(dateString);
-        return new Intl.DateTimeFormat('pt-BR', {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
+        return new Intl.DateTimeFormat("pt-BR", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
         }).format(date);
-    };
+    }
 
     function formatRuntime(minutes) {
         const hours = Math.floor(minutes / 60);
         const mins = minutes % 60;
         return `${hours}h ${mins}m`;
-    };
-    
+    }
+
     function formatVote(vote) {
         const votePorcent = Math.floor(vote * 10);
         return `${votePorcent}%`;
-    };
-    
+    }
+
     return (
         <div className={styles.movieDetail}>
             <section className={styles.options}>
@@ -148,42 +152,24 @@ function MovieDetail() {
 
             <section className={styles.comments}>
                 <h2>Avaliações</h2>
-                <div className={styles.comment}>
-                    <div className={styles.line}>
-                        <p className={styles.name}>Lorem Impsum</p>
-                        <div className={styles.stars}>
-                            <ReactStars
-                                count={5}
-                                value={5}
-                                edit={false}
-                                isHalf={true}
-                                size={25}
-                                activeColor="#ffd700"
-                            />
+                {movieComments.map((comment, index) => (
+                    <div className={styles.comment}>
+                        <div className={styles.line}>
+                            <p className={styles.name}>{comment.name}</p>
+                            <div className={styles.stars}>
+                                <ReactStars
+                                    count={5}
+                                    value={comment.stars}
+                                    edit={false}
+                                    isHalf={true}
+                                    size={25}
+                                    activeColor="#ffd700"
+                                />
+                            </div>
                         </div>
+                        <p className={styles.description}>{comment.comment}</p>
                     </div>
-                    <p className={styles.description}>
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Amet consectetur adipisicing elit.
-                    </p>
-                </div>
-                <div className={styles.comment}>
-                    <div className={styles.line}>
-                        <p className={styles.name}>Lorem Impsum</p>
-                        <div className={styles.stars}>
-                            <ReactStars
-                                count={5}
-                                value={3.5}
-                                edit={false}
-                                isHalf={true}
-                                size={25}
-                                activeColor="#ffd700"
-                            />
-                        </div>
-                    </div>
-                    <p className={styles.description}>
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Amet consectetur adipisicing elit.
-                    </p>
-                </div>
+                ))}
             </section>
         </div>
     );

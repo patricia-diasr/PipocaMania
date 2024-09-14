@@ -1,15 +1,87 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./MovieCheckout.module.css";
 import Seatmap from "../components/Seatmap";
-import seatingDatabase from "../data/seatingDatabase";
+import useMoviScreenings from "../hooks/useMovieScreenings";
 
 function MovieCheckout() {
     const [selectedDate, setSelectedDate] = useState("");
     const [selectedTime, setSelectedTime] = useState("");
     const [tickets, setTickets] = useState({ full: 0, half: 0 });
-    const [seatingData, setSeatingData] = useState(seatingDatabase);
     const [selectedSeats, setSelectedSeats] = useState([]);
+    const [availableDates, setAvailableDates] = useState([]);
+    const [availableTimes, setAvailableTimes] = useState([]);
+    const [seatingData, setSeatingData] = useState([]);
 
+    const { screenings, error, loading } = useMoviScreenings("1022789");
+
+    useEffect(() => {
+        if (screenings) {
+            const dates = [...new Set(screenings.map((screening) => screening.date))];
+            setAvailableDates(dates);
+            if (dates.length > 0) {
+                setSelectedDate(dates[0]);
+            }
+        }
+    }, [screenings]);
+
+    useEffect(() => {
+        if (selectedDate && screenings) {
+            const filteredScreenings = screenings.filter((screening) => screening.date === selectedDate);
+
+            const timesGrouped = filteredScreenings.reduce((acc, screening) => {
+                const { time, type } = screening;
+                if (!acc[type]) {
+                    acc[type] = [];
+                }
+                if (!acc[type].includes(time)) {
+                    acc[type].push(time);
+                }
+                return acc;
+            }, {});
+
+            const timesArray = Object.keys(timesGrouped).map((type) => ({
+                type,
+                options: timesGrouped[type],
+            }));
+
+            setAvailableTimes(timesArray);
+
+            if (timesArray.length > 0 && timesArray[0].options.length > 0) {
+                setSelectedTime(`${timesArray[0].options[0]} - ${timesArray[0].type}`);
+            }
+        }
+    }, [selectedDate, screenings]);
+
+    useEffect(() => {
+        if (selectedDate && selectedTime && screenings) {
+            const selectedScreening = screenings.find(
+                (screening) => {
+                    const st = selectedTime.split(" - ");
+                    const time = st[0];
+                    const type = st[1];
+                    return screening.date === selectedDate && screening.time === time && screening.type === type;
+                }
+            );
+    
+            if (selectedScreening) {
+                setSeatingData(selectedScreening.seats || []);
+                setSelectedSeats([]);
+            }
+        }
+    }, [selectedDate, selectedTime, screenings]);
+    
+
+    if (loading) {
+        return <div>Carregando...</div>;
+    }
+
+    if (error) {
+        return <div>Erro: {error}</div>;
+    }
+
+    if (!screenings) {
+        return <div>Sessões do filme não encontrados.</div>;
+    }
 
     const handleDateChange = (e) => setSelectedDate(e.target.value);
     const handleTimeChange = (e) => setSelectedTime(e.target.value);
@@ -22,21 +94,21 @@ function MovieCheckout() {
     };
 
     const handleSeatSelection = (seat) => {
-        if (seat.status === 'booked') return;
+        if (seat.status === "booked") return;
 
-        setSeatingData((prevSeats) => 
-            prevSeats.map((row, rowIndex) => 
-                row.map((s, seatIndex) => 
-                    s && s.position === seat.position 
-                        ? { ...s, status: selectedSeats.includes(seat.position) ? 'available' : 'selected' }
+        setSeatingData((prevSeats) =>
+            prevSeats.map((row, rowIndex) =>
+                row.map((s, seatIndex) =>
+                    s && s.position === seat.position
+                        ? { ...s, status: selectedSeats.includes(seat.position) ? "available" : "selected" }
                         : s
                 )
             )
         );
 
-        setSelectedSeats((prevSeats) => 
-            prevSeats.includes(seat.position) 
-                ? prevSeats.filter((pos) => pos !== seat.position) 
+        setSelectedSeats((prevSeats) =>
+            prevSeats.includes(seat.position)
+                ? prevSeats.filter((pos) => pos !== seat.position)
                 : [...prevSeats, seat.position]
         );
     };
@@ -52,12 +124,16 @@ function MovieCheckout() {
             date: selectedDate,
             time: selectedTime,
             tickets,
-            selectedSeats
+            selectedSeats,
         };
         console.log("Reserva:", reservation);
     };
 
-    const isFormValid = selectedDate && selectedTime && (tickets.full > 0 || tickets.half > 0) && (tickets.half + tickets. full === selectedSeats.length);
+    const isFormValid =
+        selectedDate &&
+        selectedTime &&
+        (tickets.full > 0 || tickets.half > 0) &&
+        tickets.half + tickets.full === selectedSeats.length;
 
     return (
         <form onSubmit={handleSubmit} className={styles.movieCheckout}>
@@ -65,58 +141,33 @@ function MovieCheckout() {
                 <h2>Selecione o dia</h2>
                 <select name="date" value={selectedDate} onChange={handleDateChange}>
                     <option value="">Selecione a data</option>
-                    <option value="2024-09-10">10 de Setembro</option>
-                    <option value="2024-09-11">11 de Setembro</option>
+                    {availableDates.map((date) => (
+                        <option key={date} value={date}>
+                            {date}
+                        </option>
+                    ))}
                 </select>
             </section>
             <section className={styles.selectTime}>
                 <h2>Selecione o horário</h2>
-                <div className={styles.sessionType}>
-                    <h3>2D - Dublado</h3>
-                    <label>
-                        <input
-                            type="radio"
-                            name="time"
-                            value="19:00D"
-                            checked={selectedTime === "19:00D"}
-                            onChange={handleTimeChange}
-                        />
-                        <span>19:00</span>
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="time"
-                            value="21:00D"
-                            checked={selectedTime === "21:00D"}
-                            onChange={handleTimeChange}
-                        />
-                        <span>21:00</span>
-                    </label>
-                </div>
-                <div className={styles.sessionType}>
-                    <h3>2D - Legendado</h3>
-                    <label>
-                        <input
-                            type="radio"
-                            name="time"
-                            value="19:00L"
-                            checked={selectedTime === "19:00L"}
-                            onChange={handleTimeChange}
-                        />
-                        <span>19:00</span>
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="time"
-                            value="21:00L"
-                            checked={selectedTime === "21:00L"}
-                            onChange={handleTimeChange}
-                        />
-                        <span>21:00</span>
-                    </label>
-                </div>
+                {availableTimes.length > 0 &&
+                    availableTimes.map(({ type, options }) => (
+                        <div key={type} className={styles.sessionType}>
+                            <h3>{type}</h3>
+                            {options.map((time) => (
+                                <label key={`${time}-${type}`}>
+                                    <input
+                                        type="radio"
+                                        name="time"
+                                        value={`${time} - ${type}`}
+                                        checked={selectedTime === `${time} - ${type}`}
+                                        onChange={handleTimeChange}
+                                    />
+                                    <span>{time}</span>
+                                </label>
+                            ))}
+                        </div>
+                    ))}
             </section>
             <section className={styles.selectSits}>
                 <h2>Selecione os assentos</h2>

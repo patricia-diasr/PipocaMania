@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiClient = axios.create({
+export const apiMovies = axios.create({
     baseURL: "https://api.themoviedb.org/3",
     timeout: 10000,
     headers: {
@@ -8,4 +8,10 @@ const apiClient = axios.create({
     },
 });
 
-export default apiClient;
+export const apiMovieTheater = axios.create({
+    baseURL: "http://localhost:3000",
+    timeout: 10000,
+    headers: {
+        "Content-Type": "application/json",
+    },
+});

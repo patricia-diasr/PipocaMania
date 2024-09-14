@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { getMovieDetails, getMovieCredits } from "../services/movieService";
+import { getMovieComments } from "../services/commentsService";
 
 function useMovieDetails(id) {
     const [movieDetails, setMovieDetails] = useState(null);
     const [movieCredits, setMovieCredits] = useState(null);
+    const [movieComments, setMovieComments] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -12,8 +14,11 @@ function useMovieDetails(id) {
             try {
                 const details = await getMovieDetails(id);
                 const credits = await getMovieCredits(id);
+                const comments = await getMovieComments(id);
+
                 setMovieDetails(details);
                 setMovieCredits(credits);
+                setMovieComments(comments)
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -26,7 +31,7 @@ function useMovieDetails(id) {
         }
     }, [id]);
 
-    return { movieDetails, movieCredits, error, loading };
+    return { movieDetails, movieCredits, movieComments, error, loading };
 }
 
 export default useMovieDetails;

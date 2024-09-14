@@ -30,8 +30,9 @@
     cursor: pointer;
 }
 
-.seat.available:hover {
-    background: var(--yellow);
+.seat.available:hover,
+.seat.selected:hover {
+    filter: brightness(.8);
 }
 
 .seat.booked {
