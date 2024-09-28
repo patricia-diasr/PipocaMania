@@ -153,7 +153,7 @@ function MovieDetail() {
             <section className={styles.comments}>
                 <h2>Avaliações</h2>
                 {movieComments.map((comment, index) => (
-                    <div className={styles.comment}>
+                    <div className={styles.comment} key={index}>
                         <div className={styles.line}>
                             <p className={styles.name}>{comment.name}</p>
                             <div className={styles.stars}>
