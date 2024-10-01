@@ -7,6 +7,8 @@ import Movie from "../pages/Movie";
 import MovieDetail from "../pages/MovieDetail";
 import MovieCheckout from "../pages/MovieCheckout";
 import NotFound from "../pages/NotFound";
+import Tickets from "../pages/Tickets";
+
 import Header from "../components/Header";
 import Menu from "../components/Menu";
 
@@ -32,9 +34,11 @@ function AppRouter() {
                 <Route path="/signin" element={<Signin />} />
 
                 <Route element={<AppLayout />}>
+                    <Route path="/tickets" element={<Tickets />} />
+
                     <Route path="movie" element={<Movie />}>
                         <Route index element={<Navigate to="detail" />} />
-                        <Route path="detail" element={<MovieDetail/>} />
+                        <Route path="detail" element={<MovieDetail />} />
                         <Route path="checkout" element={<MovieCheckout />} />
                     </Route>
                 </Route>

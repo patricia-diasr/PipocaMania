@@ -1,0 +1,55 @@
+.tickets {
+    padding: 1.2em 1em;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.tickets h1 {
+    margin: 1em 0;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.ticketsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1em;
+}
+
+.ticket {
+    background: var(--purple);
+    padding: 1.5em;
+    border-radius: 1em;
+    flex: 1 1 500px;
+    cursor: pointer;
+}
+
+.ticket:hover {
+    filter: brightness(1.2);
+}
+
+.ticket.disabled {
+    filter: opacity(.4);
+}
+
+.ticket h2 {
+    font-size: 1em;
+    margin-bottom: 1em;
+}
+
+.ticketInfo {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.ticketInfo div {
+    width: 50%;
+    min-width: 200px;
+}
+
+.ticketsContainer::after {
+    content: "";
+    flex: auto;
+    flex: 1 1 500px;
+}
