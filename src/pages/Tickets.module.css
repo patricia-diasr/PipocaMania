@@ -1,4 +1,4 @@
-.tickets {
+.tickets section {
     padding: 1.2em 1em;
     max-width: 1200px;
     margin: 0 auto;
@@ -30,7 +30,7 @@
 }
 
 .ticket.disabled {
-    filter: opacity(.4);
+    filter: opacity(0.4);
 }
 
 .ticket h2 {
@@ -52,4 +52,28 @@
     content: "";
     flex: auto;
     flex: 1 1 500px;
+}
+
+.ticketDetail {
+    padding: 2em;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2em;
+}
+
+.ticketDetail h2 {
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.ticketDetail .ticketInfo {
+    flex-direction: column;
+    width: 80%;
+}
+
+.ticketDetail .ticketInfo p {
+    font-size: 1.2em;
 }
