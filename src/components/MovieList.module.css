@@ -30,24 +30,11 @@
 }
 
 .movieList .movie {
-    width: 120px;
-    height: 180px;
-    background: gray;
     flex-shrink: 0;
     border-radius: 10px;
-}
-
-@media (min-width: 470px) {
-    .movieList .movie {
-        width: 150px;
-        height: 225px;
-        gap: 30px;
-    }
-
-    .movieList .movie {
-        width: 150px;
-        height: 225px;
-    }
+    width: 154px;
+    height: 231px;
+    background-size: contain;
 }
 
 @media (min-width: 768px) {
@@ -58,9 +45,34 @@
     .movieList h3 {
         font-size: 1.4em;
     }
-    
+
     .movieList a {
         font-size: 1em;
         margin-right: 10px;
+    }
+
+    .movieList .movies {
+        gap: 30px;
+        padding-bottom: 10px;
+        scrollbar-width: thin;
+        scrollbar-color: var(--purple) transparent;
+    }
+
+    .movieList .movies::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .movieList .movies::-webkit-scrollbar-thumb {
+        background-color: var(--purple);
+        border-radius: 10px;
+    }
+
+    .movieList .movies::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .movieList .movie {
+        width: 200px;
+        height: 300px;
     }
 }

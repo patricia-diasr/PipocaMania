@@ -82,7 +82,12 @@ function Tickets() {
 
             <Modal>
                 <div className={styles.ticketDetail}>
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=toke-ningresso " alt="QR Code do Ingresso" />
+                    <div className={styles.img}>
+                        <img
+                            src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=toke-ingresso "
+                            alt="QR Code do Ingresso"
+                        />
+                    </div>
                     <h2>Nome do Filme</h2>
                     <div className={styles.ticketInfo}>
                         <p>2D - Dublado</p>

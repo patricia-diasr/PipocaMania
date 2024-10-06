@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from "react-router-dom";
 
+import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Signin from "../pages/Signin";
 import Movie from "../pages/Movie";
@@ -35,6 +36,7 @@ function AppRouter() {
 
                 <Route element={<AppLayout />}>
                     <Route path="/tickets" element={<Tickets />} />
+                    <Route path="/home" element={<Home />} />
 
                     <Route path="movie" element={<Movie />}>
                         <Route index element={<Navigate to="detail" />} />
