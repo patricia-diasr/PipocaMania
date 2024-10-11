@@ -1,6 +1,13 @@
 import styles from "./MovieList.module.css";
+import { useNavigate } from "react-router-dom";
 
 function MovieList({ title, list }) {
+    const navigate = useNavigate();
+
+    const handleMovieClick = (movieId) => {
+        navigate(`/movie/${movieId}`);
+    };
+
     return (
         <div className={styles.movieList}>
             <div className={styles.line}>
@@ -15,6 +22,7 @@ function MovieList({ title, list }) {
                         style={{
                             backgroundImage: `url(https://image.tmdb.org/t/p/w200${movie.poster_path})`,
                         }}
+                        onClick={() => handleMovieClick(movie.id)}
                     ></div>
                 ))}
             </div>

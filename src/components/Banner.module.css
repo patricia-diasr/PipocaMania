@@ -1,12 +1,19 @@
 .banner {
     width: 100%;
-    height: 56.25vw;
-    max-height: 70vh;
+    height: 80vw;
+    background-image: url("https://image.tmdb.org/t/p/w1280/${path_image}");
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
 }
 
 .banner img {
-    width: 100%;
-    height: 56.25vw;
-    max-height: 70vh;
-    object-fit: cover;
+    display: none;
+}
+
+@media (min-width: 470px) {
+    .banner {
+        height: 56.25vw;
+        max-height: 70vh;
+    }
 }

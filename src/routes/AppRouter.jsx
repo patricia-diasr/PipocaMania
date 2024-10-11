@@ -29,7 +29,7 @@ function AppRouter() {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<Navigate to="/movie" />} />
+                <Route path="/" element={<Navigate to="/home" />} />
 
                 <Route path="/login" element={<Login />} />
                 <Route path="/signin" element={<Signin />} />
@@ -38,7 +38,7 @@ function AppRouter() {
                     <Route path="/tickets" element={<Tickets />} />
                     <Route path="/home" element={<Home />} />
 
-                    <Route path="movie" element={<Movie />}>
+                    <Route path="movie/:movieId" element={<Movie />}>
                         <Route index element={<Navigate to="detail" />} />
                         <Route path="detail" element={<MovieDetail />} />
                         <Route path="checkout" element={<MovieCheckout />} />

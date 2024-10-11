@@ -8,19 +8,23 @@ function Home() {
 
     const showingNow = [
         {
-            title: "Os Fantasmas Ainda se Divertem: Beetlejuice Beetlejuice",
+            id: "1022789",
+            poster_path: "/hGTxHEDQBa6AAuGWDrTpbJjEO0w.jpg",
+        },
+        {
+            id: "917496",
             poster_path: "/qhwYf4lHJsUyXFKEUKpt93yttJp.jpg",
         },
         {
-            title: "O Menino e o Mestre",
+            id: "587563",
             poster_path: "/zk2d0w7XrK9xvBtFiERr0HJoGuL.jpg",
         },
         {
-            title: "Transformers: O Início",
+            id: "698687",
             poster_path: "/cuFhVLPJ9zC06EMV5XAKNNRJtC4.jpg",
         },
         {
-            title: "Coringa: Delírio a Dois",
+            id: "889737",
             poster_path: "/ud3gcdKienuJcViF2tZrIAbGOW8.jpg",
         },
     ];
@@ -39,7 +43,7 @@ function Home() {
 
     return (
         <div className={styles.home}>
-            <Banner />
+            <Banner path_image="p5ozvmdgsmbWe0H8Xk7Rc8SCwAB.jpg" />
             <section>
                 <MovieList list={showingNow} title="Em Cartaz" />
                 <MovieList list={upcomingMovies} title="Próximos Lançamentos" />

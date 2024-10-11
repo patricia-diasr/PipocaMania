@@ -1,14 +1,26 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 
 import Submenu from "../components/Submenu";
 import Banner from "../components/Banner";
 
+import useMovieDetails from "../hooks/useMovieDetails";
+import useMovieScreenings from "../hooks/useMovieScreenings";
+
 function Movie() {
-    return (
+    const { movieId } = useParams();
+
+    const { movieDetails, movieCredits, movieComments, errorMovie, loadingMovie } = useMovieDetails(movieId);
+    const { screenings, errorScreening, loadingScreening } = useMovieScreenings(movieId);
+
+    return loadingMovie || loadingScreening ? (
+        <div>Carregando...</div>
+    ) : errorMovie || errorScreening ? (
+        <div>Erro carregando código</div>
+    ) : (
         <>
-            <Banner />
+            {movieDetails?.backdrop_path && <Banner path_image={movieDetails.backdrop_path} />}
             <Submenu />
-            <Outlet />
+            <Outlet context={{ movieDetails, screenings, movieCredits, movieComments }} />
         </>
     );
 }

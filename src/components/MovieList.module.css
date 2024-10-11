@@ -35,6 +35,7 @@
     width: 154px;
     height: 231px;
     background-size: contain;
+    cursor: pointer;
 }
 
 @media (min-width: 768px) {

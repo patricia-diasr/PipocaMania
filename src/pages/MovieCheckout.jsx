@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
+
 import styles from "./MovieCheckout.module.css";
 import Seatmap from "../components/Seatmap";
 import useMoviScreenings from "../hooks/useMovieScreenings";
@@ -12,7 +14,11 @@ function MovieCheckout() {
     const [availableTimes, setAvailableTimes] = useState([]);
     const [seatingData, setSeatingData] = useState([]);
 
-    const { screenings, error, loading } = useMoviScreenings("1022789");
+    const { screenings } = useOutletContext();
+
+    if (!screenings) {
+        return <div>Carregando...</div>;
+    }
 
     useEffect(() => {
         if (screenings) {
@@ -54,34 +60,19 @@ function MovieCheckout() {
 
     useEffect(() => {
         if (selectedDate && selectedTime && screenings) {
-            const selectedScreening = screenings.find(
-                (screening) => {
-                    const st = selectedTime.split(" - ");
-                    const time = st[0];
-                    const type = st[1];
-                    return screening.date === selectedDate && screening.time === time && screening.type === type;
-                }
-            );
-    
+            const selectedScreening = screenings.find((screening) => {
+                const st = selectedTime.split(" - ");
+                const time = st[0];
+                const type = st[1];
+                return screening.date === selectedDate && screening.time === time && screening.type === type;
+            });
+
             if (selectedScreening) {
                 setSeatingData(selectedScreening.seats || []);
                 setSelectedSeats([]);
             }
         }
     }, [selectedDate, selectedTime, screenings]);
-    
-
-    if (loading) {
-        return <div>Carregando...</div>;
-    }
-
-    if (error) {
-        return <div>Erro: {error}</div>;
-    }
-
-    if (!screenings) {
-        return <div>Sessões do filme não encontrados.</div>;
-    }
 
     const handleDateChange = (e) => setSelectedDate(e.target.value);
     const handleTimeChange = (e) => setSelectedTime(e.target.value);

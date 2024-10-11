@@ -1,10 +1,11 @@
 import styles from "./Banner.module.css";
 
-function Banner() {
+function Banner({ path_image }) {
     return (
-        <div className={styles.banner}>
-            <img src="https://image.tmdb.org/t/p/original/stKGOm8UyhuLPR9sZLjs5AkmncA.jpg" alt="Poster filme" />
-        </div>
+        <div
+            className={styles.banner}
+            style={{ backgroundImage: `url(https://image.tmdb.org/t/p/w1280/${path_image})` }}
+        ></div>
     );
 }
 

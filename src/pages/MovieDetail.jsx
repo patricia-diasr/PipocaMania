@@ -1,30 +1,19 @@
 import styles from "./MovieDetail.module.css";
 
+import { useOutletContext } from "react-router-dom";
 import { BsBookmark, BsCalendar, BsCurrencyDollar, BsBarChart, BsClock, BsStar } from "react-icons/bs";
 
 import ReactStars from "react-rating-stars-component";
-import useMovieDetails from "../hooks/useMovieDetails";
 
 function MovieDetail() {
-    const { movieDetails, movieCredits, movieComments, error, loading } = useMovieDetails("1022789");
-    function ratingChanged(newRating) {
-        console.log(newRating);
-    }
+    const { movieDetails, movieCredits, movieComments } = useOutletContext();
 
-    if (loading) {
+    if (!movieDetails || !movieCredits || !movieComments) {
         return <div>Carregando...</div>;
     }
 
-    if (error) {
-        return <div>Erro: {error}</div>;
-    }
-
-    if (!movieDetails) {
-        return <div>Detalhes do filme não encontrados.</div>;
-    }
-
-    if (!movieComments) {
-        return <div>Comentarios do filme não encontrados.</div>;
+    function ratingChanged(newRating) {
+        console.log(newRating);
     }
 
     const crewMap = new Map();
