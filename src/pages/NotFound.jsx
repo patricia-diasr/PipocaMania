@@ -8,7 +8,7 @@ function NotFound() {
         <Modal>
             <div className={styles.notfound}>
                 <h1>Ops... Essa página ainda não foi implementada</h1>
-                <Link to="movie">Voltar</Link>
+                <Link to="home">Voltar</Link>
             </div>
         </Modal>
     );

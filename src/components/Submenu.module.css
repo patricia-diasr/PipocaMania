@@ -16,10 +16,15 @@
 .submenu .items a {
     font-size: 1.2em;
     padding: 0.5em 1em;
+    cursor: pointer;
 }
 
 .submenu .items a.active,
 .submenu .items a:hover {
+    box-shadow: 0 2px 0 0 var(--yellow);
+}
+
+.active {
     box-shadow: 0 2px 0 0 var(--yellow);
 }
 

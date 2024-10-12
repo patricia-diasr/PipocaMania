@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
-import { useOutletContext } from "react-router-dom";
 
 import styles from "./MovieCheckout.module.css";
 import Seatmap from "../components/Seatmap";
-import useMoviScreenings from "../hooks/useMovieScreenings";
 
-function MovieCheckout() {
+function MovieCheckout({ screenings }) {
     const [selectedDate, setSelectedDate] = useState("");
     const [selectedTime, setSelectedTime] = useState("");
     const [tickets, setTickets] = useState({ full: 0, half: 0 });
@@ -13,8 +11,6 @@ function MovieCheckout() {
     const [availableDates, setAvailableDates] = useState([]);
     const [availableTimes, setAvailableTimes] = useState([]);
     const [seatingData, setSeatingData] = useState([]);
-
-    const { screenings } = useOutletContext();
 
     if (!screenings) {
         return <div>Carregando...</div>;

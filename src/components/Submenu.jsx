@@ -1,24 +1,30 @@
+import { useState } from "react";
 import styles from "./Submenu.module.css";
 
-import { NavLink } from "react-router-dom";
-import { useParams } from "react-router-dom";
+function Submenu({ setActivePage }) {
+    const [activeLink, setActiveLink] = useState("detail"); 
 
-function Submenu() {
-    const { movieId } = useParams();
+    const handleClick = (page) => {
+        setActivePage(page);
+        setActiveLink(page);
+    };
 
     return (
         <nav className={styles.submenu}>
             <div className={styles.items}>
-                <NavLink to={`/movie/${movieId}/detail`} className={({ isActive }) => (isActive ? styles.active : "")}>
+                <a
+                    onClick={() => handleClick("detail")}
+                    className={`${styles.button} ${activeLink === "detail" ? styles.active : ""}`}
+                >
                     <span>Sobre o filme</span>
-                </NavLink>
+                </a>
 
-                <NavLink
-                    to={`/movie/${movieId}/checkout`}
-                    className={({ isActive }) => (isActive ? styles.active : "")}
+                <a
+                    onClick={() => handleClick("checkout")}
+                    className={`${styles.button} ${activeLink === "checkout" ? styles.active : ""}`}
                 >
                     <span>Assistir</span>
-                </NavLink>
+                </a>
             </div>
         </nav>
     );

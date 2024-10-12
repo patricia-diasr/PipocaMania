@@ -1,13 +1,10 @@
 import styles from "./MovieDetail.module.css";
 
-import { useOutletContext } from "react-router-dom";
 import { BsBookmark, BsCalendar, BsCurrencyDollar, BsBarChart, BsClock, BsStar } from "react-icons/bs";
 
 import ReactStars from "react-rating-stars-component";
 
-function MovieDetail() {
-    const { movieDetails, movieCredits, movieComments } = useOutletContext();
-
+function MovieDetail({ movieDetails, movieCredits, movieComments }) {
     if (!movieDetails || !movieCredits || !movieComments) {
         return <div>Carregando...</div>;
     }

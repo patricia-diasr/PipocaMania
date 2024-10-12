@@ -37,12 +37,7 @@ function AppRouter() {
                 <Route element={<AppLayout />}>
                     <Route path="/tickets" element={<Tickets />} />
                     <Route path="/home" element={<Home />} />
-
-                    <Route path="movie/:movieId" element={<Movie />}>
-                        <Route index element={<Navigate to="detail" />} />
-                        <Route path="detail" element={<MovieDetail />} />
-                        <Route path="checkout" element={<MovieCheckout />} />
-                    </Route>
+                    <Route path="movie/:movieId" element={<Movie />} />
                 </Route>
 
                 <Route path="*" element={<NotFound />} />
