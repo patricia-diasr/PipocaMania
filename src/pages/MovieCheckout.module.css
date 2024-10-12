@@ -139,6 +139,17 @@
     opacity: 0.6;
 }
 
+.checkoutInfo {
+    margin: 2em 1em;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2em;
+    scroll-behavior: auto;
+}
+
 @media (min-width: 1100px) {
     .movieCheckout {
         display: grid;

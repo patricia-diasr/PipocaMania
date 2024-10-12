@@ -1,17 +1,18 @@
 import { useState } from "react";
-import { postCheckoutReservation } from "../services/checkoutService";
+import { saveCheckout, updateSeatingData } from "../services/checkoutService";
 
 function useCheckout() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
 
-    const submitCheckout = async (user, reservation) => {
+    const submitCheckout = async (user, reservation, seatingData) => {
         setLoading(true);
         setError(null);
         setSuccess(false);
         try {
-            await postCheckoutReservation(user, reservation);
+            await saveCheckout(user, reservation);
+            await updateSeatingData(reservation.movieId, reservation.screeningId, seatingData);
             setSuccess(true);
         } catch (err) {
             setError(err.message);

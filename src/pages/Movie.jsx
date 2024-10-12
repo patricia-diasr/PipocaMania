@@ -33,7 +33,7 @@ function Movie() {
                     movieComments={movieComments}
                 />
             ) : (
-                <MovieCheckout screenings={screenings} />
+                <MovieCheckout screenings={screenings} movieName={movieDetails.title} movieId={movieId} />
             )}
         </>
     );

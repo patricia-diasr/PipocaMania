@@ -1,16 +1,23 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import styles from "./MovieCheckout.module.css";
 import Seatmap from "../components/Seatmap";
+import useCheckout from "../hooks/useCheckout";
+import Modal from "../components/Modal";
 
-function MovieCheckout({ screenings }) {
+function MovieCheckout({ screenings, movieName, movieId }) {
     const [selectedDate, setSelectedDate] = useState("");
     const [selectedTime, setSelectedTime] = useState("");
+    const [selectedSession, setSelectedSession] = useState(null);
     const [tickets, setTickets] = useState({ full: 0, half: 0 });
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [availableDates, setAvailableDates] = useState([]);
     const [availableTimes, setAvailableTimes] = useState([]);
     const [seatingData, setSeatingData] = useState([]);
+    const [modalMessage, setModalMessage] = useState("");
+    const [showModal, setShowModal] = useState(false);
+    const { submitCheckout, loading, error, success } = useCheckout();
 
     if (!screenings) {
         return <div>Carregando...</div>;
@@ -57,13 +64,12 @@ function MovieCheckout({ screenings }) {
     useEffect(() => {
         if (selectedDate && selectedTime && screenings) {
             const selectedScreening = screenings.find((screening) => {
-                const st = selectedTime.split(" - ");
-                const time = st[0];
-                const type = st[1];
+                const [time, type] = selectedTime.split(" - ");
                 return screening.date === selectedDate && screening.time === time && screening.type === type;
             });
 
             if (selectedScreening) {
+                setSelectedSession(selectedScreening.id); // Atualiza o estado selectedSession
                 setSeatingData(selectedScreening.seats || []);
                 setSelectedSeats([]);
             }
@@ -84,8 +90,8 @@ function MovieCheckout({ screenings }) {
         if (seat.status === "booked") return;
 
         setSeatingData((prevSeats) =>
-            prevSeats.map((row, rowIndex) =>
-                row.map((s, seatIndex) =>
+            prevSeats.map((row) =>
+                row.map((s) =>
                     s && s.position === seat.position
                         ? { ...s, status: selectedSeats.includes(seat.position) ? "available" : "selected" }
                         : s
@@ -100,7 +106,7 @@ function MovieCheckout({ screenings }) {
         );
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!isFormValid) {
@@ -108,12 +114,33 @@ function MovieCheckout({ screenings }) {
         }
 
         const reservation = {
+            movieName: movieName,
+            movieId: movieId,
+            screeningId: selectedSession,
             date: selectedDate,
             time: selectedTime,
             tickets,
             selectedSeats,
+            status: true,
         };
-        console.log("Reserva:", reservation);
+
+        const user = "1";
+
+        setModalMessage("Enviando a compra...");
+        setShowModal(true);
+
+        try {
+            await submitCheckout(user, reservation, seatingData);
+            setModalMessage("Compra realizada com sucesso!");
+
+            setSelectedDate("");
+            setSelectedTime("");
+            setSelectedSession(null);
+            setTickets({ full: 0, half: 0 });
+            setSelectedSeats([]);
+        } catch (err) {
+            setModalMessage("Ocorreu um erro ao realizar a compra. Tente novamente.");
+        }
     };
 
     const isFormValid =
@@ -123,77 +150,87 @@ function MovieCheckout({ screenings }) {
         tickets.half + tickets.full === selectedSeats.length;
 
     return (
-        <form onSubmit={handleSubmit} className={styles.movieCheckout}>
-            <section className={styles.selectDay}>
-                <h2>Selecione o dia</h2>
-                <select name="date" value={selectedDate} onChange={handleDateChange}>
-                    <option value="">Selecione a data</option>
-                    {availableDates.map((date) => (
-                        <option key={date} value={date}>
-                            {date}
-                        </option>
-                    ))}
-                </select>
-            </section>
-            <section className={styles.selectTime}>
-                <h2>Selecione o horário</h2>
-                {availableTimes.length > 0 &&
-                    availableTimes.map(({ type, options }) => (
-                        <div key={type} className={styles.sessionType}>
-                            <h3>{type}</h3>
-                            {options.map((time) => (
-                                <label key={`${time}-${type}`}>
-                                    <input
-                                        type="radio"
-                                        name="time"
-                                        value={`${time} - ${type}`}
-                                        checked={selectedTime === `${time} - ${type}`}
-                                        onChange={handleTimeChange}
-                                    />
-                                    <span>{time}</span>
-                                </label>
-                            ))}
+        <div>
+            <form onSubmit={handleSubmit} className={styles.movieCheckout}>
+                <section className={styles.selectDay}>
+                    <h2>Selecione o dia</h2>
+                    <select name="date" value={selectedDate} onChange={handleDateChange}>
+                        <option value="">Selecione a data</option>
+                        {availableDates.map((date) => (
+                            <option key={date} value={date}>
+                                {date}
+                            </option>
+                        ))}
+                    </select>
+                </section>
+                <section className={styles.selectTime}>
+                    <h2>Selecione o horário</h2>
+                    {availableTimes.length > 0 &&
+                        availableTimes.map(({ type, options }) => (
+                            <div key={type} className={styles.sessionType}>
+                                <h3>{type}</h3>
+                                {options.map((time) => (
+                                    <label key={`${time}-${type}`}>
+                                        <input
+                                            type="radio"
+                                            name="time"
+                                            value={`${time} - ${type}`}
+                                            checked={selectedTime === `${time} - ${type}`}
+                                            onChange={handleTimeChange}
+                                        />
+                                        <span>{time}</span>
+                                    </label>
+                                ))}
+                            </div>
+                        ))}
+                </section>
+                <section className={styles.selectSits}>
+                    <h2>Selecione os assentos</h2>
+                    <Seatmap seatingData={seatingData} onSeatSelect={handleSeatSelection} />
+                </section>
+                <section className={styles.selectTickets}>
+                    <h2>Selecione os ingressos</h2>
+                    <div className={styles.ticketType}>
+                        <h3>Inteiras</h3>
+                        <div className={styles.inputNumber}>
+                            <button type="button" onClick={() => handleTicketChange("full", "decrement")}>
+                                -
+                            </button>
+                            <span>{tickets.full}</span>
+                            <button type="button" onClick={() => handleTicketChange("full", "increment")}>
+                                +
+                            </button>
                         </div>
-                    ))}
-            </section>
-            <section className={styles.selectSits}>
-                <h2>Selecione os assentos</h2>
-                <Seatmap seatingData={seatingData} onSeatSelect={handleSeatSelection} />
-            </section>
-            <section className={styles.selectTickets}>
-                <h2>Selecione os ingressos</h2>
-                <div className={styles.ticketType}>
-                    <h3>Inteiras</h3>
-                    <div className={styles.inputNumber}>
-                        <button type="button" onClick={() => handleTicketChange("full", "decrement")}>
-                            -
-                        </button>
-                        <span>{tickets.full}</span>
-                        <button type="button" onClick={() => handleTicketChange("full", "increment")}>
-                            +
-                        </button>
+                        <p className={styles.price}>R$ 30,00</p>
                     </div>
-                    <p className={styles.price}>R$ 30,00</p>
-                </div>
 
-                <div className={styles.ticketType}>
-                    <h3>Meia Entrada</h3>
-                    <div className={styles.inputNumber}>
-                        <button type="button" onClick={() => handleTicketChange("half", "decrement")}>
-                            -
-                        </button>
-                        <span>{tickets.half}</span>
-                        <button type="button" onClick={() => handleTicketChange("half", "increment")}>
-                            +
-                        </button>
+                    <div className={styles.ticketType}>
+                        <h3>Meia Entrada</h3>
+                        <div className={styles.inputNumber}>
+                            <button type="button" onClick={() => handleTicketChange("half", "decrement")}>
+                                -
+                            </button>
+                            <span>{tickets.half}</span>
+                            <button type="button" onClick={() => handleTicketChange("half", "increment")}>
+                                +
+                            </button>
+                        </div>
+                        <p className={styles.price}>R$ 15,00</p>
                     </div>
-                    <p className={styles.price}>R$ 15,00</p>
-                </div>
-            </section>
-            <button type="submit" disabled={!isFormValid}>
-                Aplicar
-            </button>
-        </form>
+                </section>
+                <button type="submit" disabled={!isFormValid}>
+                    Aplicar
+                </button>
+            </form>
+            {showModal && (
+                <Modal>
+                    <div className={styles.checkoutInfo}>
+                        <h2>{modalMessage}</h2>
+                        <Link to="/tickets">Ver ingressos</Link>
+                    </div>
+                </Modal>
+            )}
+        </div>
     );
 }
 
