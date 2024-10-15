@@ -1,4 +1,5 @@
 import { apiMovies } from "./apiClient";
+import { apiMovieTheater } from "./apiClient";
 
 const API_KEY = "df206deae15646e9166c5f330a509970";
 
@@ -7,7 +8,15 @@ export async function getUpcomingMovies() {
         const response = await apiMovies.get(`/movie/upcoming?api_key=${API_KEY}&language=pt-BR&region=BR`);
         return response.data.results.slice(0, 4);
     } catch (error) {
-        throw new Error('Error fetching upcoming movies');
+        throw new Error("Error fetching upcoming movies");
     }
 }
 
+export async function getUserMovieLists(user) {
+    try {
+        const response = await apiMovieTheater.get(`/users/${user}`);
+        return response.data;
+    } catch (error) {
+        throw new Error("Error fetching user movie lists");
+    }
+}

@@ -12,6 +12,7 @@ import Tickets from "../pages/Tickets";
 
 import Header from "../components/Header";
 import Menu from "../components/Menu";
+import Lists from "../pages/Lists";
 
 function AppLayout() {
     return (
@@ -35,8 +36,9 @@ function AppRouter() {
                 <Route path="/signin" element={<Signin />} />
 
                 <Route element={<AppLayout />}>
-                    <Route path="/tickets" element={<Tickets />} />
                     <Route path="/home" element={<Home />} />
+                    <Route path="/lists" element={<Lists />} />
+                    <Route path="/tickets" element={<Tickets />} />
                     <Route path="movie/:movieId" element={<Movie />} />
                 </Route>
 

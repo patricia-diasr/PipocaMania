@@ -1,0 +1,11 @@
+.lists section {
+    padding: 1.2em 1em;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.lists h1 {
+    margin: 1em 0;
+    font-size: 1.5em;
+    text-align: center;
+}

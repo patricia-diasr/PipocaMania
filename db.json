@@ -4341,8 +4341,38 @@
             ]
         }
     ],
-    "users": {
-        "id": "1",
-        "tickets": []
-    }
+    "users": [
+        {
+            "id": "1",
+            "tickets": [],
+            "watchlist": [
+                {
+                    "id": "698687",
+                    "poster_path": "/cuFhVLPJ9zC06EMV5XAKNNRJtC4.jpg"
+                },
+                {
+                    "id": "889737",
+                    "poster_path": "/ud3gcdKienuJcViF2tZrIAbGOW8.jpg"
+                }
+            ],
+            "remindMeWhenReleased": [
+                {
+                    "id": "912649",
+                    "poster_path": "/fTGJWXuFDcRSIVPgQLbxziGquOC.jpg"
+                }
+            ],
+            "myReviews": [
+                {
+                    "id": "1079091",
+                    "poster_path": "/tYzTDYmiTVfVzsPtXLMPqrk4t6V.jpg",
+                    "stars": 4
+                },
+                {
+                    "id": "533535",
+                    "poster_path": "/53YWSo75mSaw1vd2YEeX5kwkRos.jpg",
+                    "stars": 5
+                }
+            ]
+        }
+    ]
 }
