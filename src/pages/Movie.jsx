@@ -23,11 +23,12 @@ function Movie() {
     return (
         <>
             {movieDetails?.backdrop_path && <Banner path_image={movieDetails.backdrop_path} />}
-            
+
             <Submenu setActivePage={setActivePage} />
 
             {activePage === "detail" ? (
-                <MovieDetail 
+                <MovieDetail
+                    movieId={movieId}
                     movieDetails={movieDetails}
                     movieCredits={movieCredits}
                     movieComments={movieComments}

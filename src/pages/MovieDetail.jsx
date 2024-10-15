@@ -1,16 +1,31 @@
+import ReactStars from "react-rating-stars-component";
 import styles from "./MovieDetail.module.css";
+import Modal from "../components/Modal";
+import useGetMovieComment from "../hooks/useGetMovieComment";
 
 import { BsBookmark, BsCalendar, BsCurrencyDollar, BsBarChart, BsClock, BsStar } from "react-icons/bs";
+import { useState } from "react";
 
-import ReactStars from "react-rating-stars-component";
+function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
+    const [showModal, setShowModal] = useState(false);
+    const { review: myReview, error, loading } = useGetMovieComment("1", movieId);
 
-function MovieDetail({ movieDetails, movieCredits, movieComments }) {
+    const [newReview, setNewReview] = useState({
+        stars: 0,
+        comment: "",
+    });
+
     if (!movieDetails) {
         return <p className="warning">Carregando...</p>;
     }
 
     function ratingChanged(newRating) {
-        console.log(newRating);
+        setShowModal(true);
+        setNewReview({ ...newReview, stars: newRating });
+    }
+
+    function saveNewRating() {
+        setShowModal(false);
     }
 
     const crewMap = new Map();
@@ -60,107 +75,145 @@ function MovieDetail({ movieDetails, movieCredits, movieComments }) {
         return `${votePorcent}%`;
     }
 
+    function isFutureRelease(releaseDate) {
+        const today = new Date();
+        const release = new Date(releaseDate);
+        return release > today;
+    }
+
     return (
-        <div className={styles.movieDetail}>
-            <section className={styles.options}>
-                <div className={styles.stars}>
-                    <ReactStars count={5} isHalf={true} onChange={ratingChanged} size={35} activeColor="#ffd700" />
-                </div>
-                <BsBookmark className={styles.icon} />
-            </section>
-
-            <section className={styles.about}>
-                <h1>{movieDetails.title}</h1>
-                <h2>Sinopse</h2>
-                <p>{movieDetails.overview}</p>
-            </section>
-
-            <section className={styles.filmCreators}>
-                {filmCreators.map((member, index) => (
-                    <div key={index} className={styles.filmCreator}>
-                        <p className={styles.name}>{member.name}</p>
-                        <p className={styles.job}>{member.jobs.join(", ")}</p>
+        <div>
+            <div className={styles.movieDetail}>
+                <section className={styles.options}>
+                    <div className={styles.stars}>
+                        <ReactStars
+                            count={5}
+                            value={myReview.stars}
+                            isHalf={true}
+                            onChange={ratingChanged}
+                            size={35}
+                            activeColor="#ffd700"
+                        />
                     </div>
-                ))}
-            </section>
+                    <BsBookmark className={styles.icon} />
+                </section>
 
-            <section className={styles.info}>
-                <div className={styles.infoBox}>
-                    <div className={styles.infoLine}>
-                        <BsStar className={styles.icon} />
-                        <p>
-                            <strong>Avaliação:</strong> {formatVote(movieDetails.vote_average)}
-                        </p>
-                    </div>
+                <section className={styles.about}>
+                    <h1>{movieDetails.title}</h1>
+                    <h2>Sinopse</h2>
+                    <p>{movieDetails.overview}</p>
+                </section>
 
-                    <div className={styles.infoLine}>
-                        <BsClock className={styles.icon} />
-                        <p>
-                            <strong>Duração:</strong> {formatRuntime(movieDetails.runtime)}
-                        </p>
-                    </div>
-
-                    <div className={styles.infoLine}>
-                        <BsCalendar className={styles.icon} />
-                        <p>
-                            <strong>Lançamento:</strong> {formatDate(movieDetails.release_date)}
-                        </p>
-                    </div>
-
-                    <div className={styles.infoLine}>
-                        <BsCurrencyDollar className={styles.icon} />
-                        <p>
-                            <strong>Orçamento:</strong> {formatCurrency(movieDetails.budget)}
-                        </p>
-                    </div>
-
-                    <div className={styles.infoLine}>
-                        <BsBarChart className={styles.icon} />
-                        <p>
-                            <strong>Receita:</strong> {formatCurrency(movieDetails.revenue)}
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            <section className={styles.cast}>
-                <h2>Elenco</h2>
-                <div className={styles.people}>
-                    {movieCredits?.cast.slice(0, 6).map((person, index) => (
-                        <div key={index} className={styles.person}>
-                            <img src={`https://image.tmdb.org/t/p/w185${person.profile_path}`} alt={person.name} />
-                            <p className={styles.name}>{person.name}</p>
-                            <p className={styles.job}>{person.character}</p>
+                <section className={styles.filmCreators}>
+                    {filmCreators.map((member, index) => (
+                        <div key={index} className={styles.filmCreator}>
+                            <p className={styles.name}>{member.name}</p>
+                            <p className={styles.job}>{member.jobs.join(", ")}</p>
                         </div>
                     ))}
-                </div>
-            </section>
+                </section>
 
-            <section className={styles.comments}>
-                <h2>Avaliações</h2>
-                {movieComments.length > 0 ? (
-                    movieComments.map((comment, index) => (
-                        <div className={styles.comment} key={index}>
-                            <div className={styles.line}>
-                                <p className={styles.name}>{comment.name}</p>
-                                <div className={styles.stars}>
-                                    <ReactStars
-                                        count={5}
-                                        value={comment.stars}
-                                        edit={false}
-                                        isHalf={true}
-                                        size={25}
-                                        activeColor="#ffd700"
-                                    />
-                                </div>
-                            </div>
-                            <p className={styles.description}>{comment.comment}</p>
+                <section className={styles.info}>
+                    <div className={styles.infoBox}>
+                        <div className={styles.infoLine}>
+                            <BsStar className={styles.icon} />
+                            <p>
+                                <strong>Avaliação:</strong> {formatVote(movieDetails.vote_average)}
+                            </p>
                         </div>
-                    ))
-                ) : (
-                    <p>Não há avaliações</p>
-                )}
-            </section>
+
+                        <div className={styles.infoLine}>
+                            <BsClock className={styles.icon} />
+                            <p>
+                                <strong>Duração:</strong> {formatRuntime(movieDetails.runtime)}
+                            </p>
+                        </div>
+
+                        <div className={styles.infoLine}>
+                            <BsCalendar className={styles.icon} />
+                            <p>
+                                <strong>Lançamento:</strong> {formatDate(movieDetails.release_date)}
+                            </p>
+                        </div>
+
+                        <div className={styles.infoLine}>
+                            <BsCurrencyDollar className={styles.icon} />
+                            <p>
+                                <strong>Orçamento:</strong> {formatCurrency(movieDetails.budget)}
+                            </p>
+                        </div>
+
+                        <div className={styles.infoLine}>
+                            <BsBarChart className={styles.icon} />
+                            <p>
+                                <strong>Receita:</strong> {formatCurrency(movieDetails.revenue)}
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section className={styles.cast}>
+                    <h2>Elenco</h2>
+                    <div className={styles.people}>
+                        {movieCredits?.cast.slice(0, 6).map((person, index) => (
+                            <div key={index} className={styles.person}>
+                                <img src={`https://image.tmdb.org/t/p/w185${person.profile_path}`} alt={person.name} />
+                                <p className={styles.name}>{person.name}</p>
+                                <p className={styles.job}>{person.character}</p>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                <section className={styles.comments}>
+                    <h2>Avaliações</h2>
+                    {movieComments.length > 0 ? (
+                        movieComments.map((comment, index) => (
+                            <div className={styles.comment} key={index}>
+                                <div className={styles.line}>
+                                    <p className={styles.name}>{comment.name}</p>
+                                    <div className={styles.stars}>
+                                        <ReactStars
+                                            count={5}
+                                            value={comment.stars}
+                                            edit={false}
+                                            isHalf={true}
+                                            size={25}
+                                            activeColor="#ffd700"
+                                        />
+                                    </div>
+                                </div>
+                                <p className={styles.description}>{comment.comment}</p>
+                            </div>
+                        ))
+                    ) : (
+                        <p>Não há avaliações</p>
+                    )}
+                </section>
+            </div>
+            {showModal && (
+                <Modal>
+                    <div className={styles.newReview}>
+                        <ReactStars
+                            count={5}
+                            value={newReview.stars}
+                            isHalf={true}
+                            onChange={ratingChanged}
+                            size={35}
+                            activeColor="#ffd700"
+                        />
+                        <h3>Minha Avaliação</h3>
+                        <textarea
+                            value={myReview.comment}
+                            onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
+                            placeholder="Escreva sua avaliação aqui..."
+                        ></textarea>
+                        <button type="submit" onClick={saveNewRating}>
+                            Salvar
+                        </button>
+                    </div>
+                </Modal>
+            )}
         </div>
     );
 }

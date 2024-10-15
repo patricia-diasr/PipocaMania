@@ -130,6 +130,47 @@
     font-weight: 300;
 }
 
+.newReview {
+    margin: 2em 1em;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    scroll-behavior: auto;
+}
+
+.newReview h3 {
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.newReview textarea {
+    margin: 1em 0;
+    width: 100%;
+    height: 180px;
+    border-radius: 1em;
+    padding: 1em;
+    font-size: 1em;
+    color: var(--black);
+}
+
+.newReview button {
+    display: block;
+    width: 100%;
+    padding: 0.5em;
+    background-color: var(--violet);
+    border: none;
+    border-radius: 2em;
+    cursor: pointer;
+    font-size: 1.1em;
+}
+
+.newReview button:hover {
+    background: var(--yellow);
+}
+
 @media (min-width: 900px) {
     .movieDetail h1 {
         font-size: 2em;

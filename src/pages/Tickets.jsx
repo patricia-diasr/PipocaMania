@@ -3,6 +3,7 @@ import styles from "./Tickets.module.css";
 import Modal from "../components/Modal";
 
 function Tickets() {
+    
     return (
         <div className={styles.tickets}>
             <section>
