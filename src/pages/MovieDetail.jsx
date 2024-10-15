@@ -5,8 +5,8 @@ import { BsBookmark, BsCalendar, BsCurrencyDollar, BsBarChart, BsClock, BsStar }
 import ReactStars from "react-rating-stars-component";
 
 function MovieDetail({ movieDetails, movieCredits, movieComments }) {
-    if (!movieDetails || !movieCredits || !movieComments) {
-        return <div>Carregando...</div>;
+    if (!movieDetails) {
+        return <p className="warning">Carregando...</p>;
     }
 
     function ratingChanged(newRating) {
@@ -138,24 +138,28 @@ function MovieDetail({ movieDetails, movieCredits, movieComments }) {
 
             <section className={styles.comments}>
                 <h2>Avaliações</h2>
-                {movieComments.map((comment, index) => (
-                    <div className={styles.comment} key={index}>
-                        <div className={styles.line}>
-                            <p className={styles.name}>{comment.name}</p>
-                            <div className={styles.stars}>
-                                <ReactStars
-                                    count={5}
-                                    value={comment.stars}
-                                    edit={false}
-                                    isHalf={true}
-                                    size={25}
-                                    activeColor="#ffd700"
-                                />
+                {movieComments.length > 0 ? (
+                    movieComments.map((comment, index) => (
+                        <div className={styles.comment} key={index}>
+                            <div className={styles.line}>
+                                <p className={styles.name}>{comment.name}</p>
+                                <div className={styles.stars}>
+                                    <ReactStars
+                                        count={5}
+                                        value={comment.stars}
+                                        edit={false}
+                                        isHalf={true}
+                                        size={25}
+                                        activeColor="#ffd700"
+                                    />
+                                </div>
                             </div>
+                            <p className={styles.description}>{comment.comment}</p>
                         </div>
-                        <p className={styles.description}>{comment.comment}</p>
-                    </div>
-                ))}
+                    ))
+                ) : (
+                    <p>Não há avaliações</p>
+                )}
             </section>
         </div>
     );

@@ -30,15 +30,15 @@ function Home() {
     ];
 
     if (loading) {
-        return <div>Carregando...</div>;
+        return <p className="warning">Carregando...</p>;
     }
 
     if (error) {
-        return <div>Erro: {error}</div>;
+        return <p className="warning">Erro: {error}</p>;
     }
 
     if (!upcomingMovies) {
-        return <div>Próximos lançamentos não encontrados.</div>;
+        return <p className="warning">Próximos lançamentos não encontrados.</p>;
     }
 
     return (

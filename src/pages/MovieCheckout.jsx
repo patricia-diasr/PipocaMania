@@ -20,7 +20,7 @@ function MovieCheckout({ screenings, movieName, movieId }) {
     const { submitCheckout, loading, error, success } = useCheckout();
 
     if (!screenings) {
-        return <div>Carregando...</div>;
+        return <p className="warning">Não há sessões disponíveis para esse filme</p>;
     }
 
     useEffect(() => {

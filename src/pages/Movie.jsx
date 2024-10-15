@@ -17,8 +17,8 @@ function Movie() {
     const { movieDetails, movieCredits, movieComments, errorMovie, loadingMovie } = useMovieDetails(movieId);
     const { screenings, errorScreening, loadingScreening } = useMovieScreenings(movieId);
 
-    if (loadingMovie || loadingScreening) return <div>Carregando...</div>;
-    if (errorMovie || errorScreening) return <div>Erro carregando código</div>;
+    if (loadingMovie || loadingScreening) return <p className="warning">Carregando...</p>;
+    if (errorMovie || errorScreening) return <p className="warning">Erro carregando informações</p>;
 
     return (
         <>

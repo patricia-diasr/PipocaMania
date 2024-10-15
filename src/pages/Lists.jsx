@@ -22,7 +22,7 @@ function Lists() {
         <div className={styles.lists}>
             <section>
                 <h1>Minhas Listas</h1>
-                <MovieList list={myReviews} title="Minhas availiaçõoes" />
+                <MovieList list={myReviews} title="Minhas avaliaçõoes" />
                 <MovieList list={watchlist} title="Quero assistir" />
                 <MovieList list={remindMeWhenReleased} title="Avise-me quando lançar" />
             </section>

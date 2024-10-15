@@ -33,3 +33,7 @@ a:hover > *,
 body {
     background: var(--black);
 }
+
+.warning {
+    margin: 2em;
+}
