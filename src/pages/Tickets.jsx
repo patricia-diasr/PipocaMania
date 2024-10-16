@@ -1,106 +1,84 @@
 import styles from "./Tickets.module.css";
-
 import Modal from "../components/Modal";
+import useGetCheckout from "../hooks/useGetCheckout";
+import { useState } from "react";
 
 function Tickets() {
-    
+    const user = 1;
+    const { tickets, error, loading } = useGetCheckout(user);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedTicket, setSelectedTicket] = useState(false);
+
+    const openModal = (ticket) => {
+        if (ticket.status) {
+            setSelectedTicket(ticket);
+            setIsModalVisible(true);
+        }
+    };
+
+    const closeModal = () => setIsModalVisible(false);
+
+    if (loading) {
+        return <p className="warning">Carregando...</p>;
+    }
+
+    if (error) {
+        return <p className="warning">Erro: {error}</p>;
+    }
+
+    if (!tickets) {
+        return <p className="warning">Ingressos não encontrados.</p>;
+    }
+
     return (
         <div className={styles.tickets}>
             <section>
                 <h1>Meus Ingressos</h1>
                 <div className={styles.ticketsContainer}>
-                    <div className={styles.ticket}>
-                        <h2>Nome do Filme</h2>
-                        <div className={styles.ticketInfo}>
-                            <div>
-                                <p>2D - Dublado</p>
-                                <p>30/09 - 20h00</p>
-                            </div>
-                            <div>
-                                <p>2x - Meia-entrada</p>
-                                <p>1x - Inteira</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={styles.ticket}>
-                        <h2>Nome do Filme</h2>
-                        <div className={styles.ticketInfo}>
-                            <div>
-                                <p>2D - Dublado</p>
-                                <p>30/09 - 20h00</p>
-                            </div>
-                            <div>
-                                <p>2x - Meia-entrada</p>
-                                <p>1x - Inteira</p>
+                    {tickets.map((ticket) => (
+                        <div
+                            className={`${styles.ticket} ${ticket.status === false ? styles.disabled : ""}`}
+                            key={ticket.movieId}
+                            onClick={() => openModal(ticket)}
+                        >
+                            <h2>{ticket.movieName}</h2>
+                            <div className={styles.ticketInfo}>
+                                <div>
+                                    <p>{ticket.date}</p>
+                                    <p>{ticket.time}</p>
+                                    <p>Assentos: {ticket.selectedSeats.join(", ")}</p>
+                                </div>
+                                <div>
+                                    {ticket.tickets.half > 0 && <p>{ticket.tickets.half}x - Meia-entrada</p>}
+                                    {ticket.tickets.full > 0 && <p>{ticket.tickets.full}x - Inteira</p>}
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div className={styles.ticket}>
-                        <h2>Nome do Filme</h2>
-                        <div className={styles.ticketInfo}>
-                            <div>
-                                <p>2D - Dublado</p>
-                                <p>30/09 - 20h00</p>
-                            </div>
-                            <div>
-                                <p>2x - Meia-entrada</p>
-                                <p>1x - Inteira</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={styles.ticket}>
-                        <h2>Nome do Filme</h2>
-                        <div className={styles.ticketInfo}>
-                            <div>
-                                <p>2D - Dublado</p>
-                                <p>30/09 - 20h00</p>
-                            </div>
-                            <div>
-                                <p>2x - Meia-entrada</p>
-                                <p>1x - Inteira</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={`${styles.ticket} ${styles.disabled}`}>
-                        <h2>Nome do Filme</h2>
-                        <div className={styles.ticketInfo}>
-                            <div>
-                                <p>2D - Dublado</p>
-                                <p>30/09 - 20h00</p>
-                            </div>
-                            <div>
-                                <p>2x - Meia-entrada</p>
-                                <p>1x - Inteira</p>
-                            </div>
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </section>
-
-            <Modal>
-                <div className={styles.ticketDetail}>
-                    <div className={styles.img}>
-                        <img
-                            src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=toke-ingresso "
-                            alt="QR Code do Ingresso"
-                        />
+            {isModalVisible && (
+                <Modal show={isModalVisible} onClose={closeModal}>
+                    <div className={styles.ticketDetail}>
+                        <div className={styles.img}>
+                            <img
+                                src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${selectedTicket.checkoutId}`}
+                                alt="QR Code do Ingresso"
+                            />
+                        </div>
+                        <h2>{selectedTicket.movieName}</h2>
+                        <div className={styles.ticketInfo}>
+                            <p>{selectedTicket.date}</p>
+                            <p>{selectedTicket.time}</p>
+                            <br />
+                            {selectedTicket.tickets.half > 0 && <p>{selectedTicket.tickets.half}x - Meia-entrada</p>}
+                            {selectedTicket.tickets.full > 0 && <p>{selectedTicket.tickets.full}x - Inteira</p>}
+                            <br />
+                            <p>Assentos: {selectedTicket.selectedSeats.join(", ")}</p>
+                        </div>
                     </div>
-                    <h2>Nome do Filme</h2>
-                    <div className={styles.ticketInfo}>
-                        <p>2D - Dublado</p>
-                        <p>30/09 - 20h00</p>
-                        <br />
-                        <p>2x - Meia-entrada</p>
-                        <p>1x - Inteira</p>
-                        <br />
-                        <p>Assentos: A6, A7, A8</p>
-                    </div>
-                </div>
-            </Modal>
+                </Modal>
+            )}
         </div>
     );
 }

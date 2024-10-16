@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
 
 import styles from "./MovieCheckout.module.css";
 import Seatmap from "../components/Seatmap";
@@ -114,6 +115,7 @@ function MovieCheckout({ screenings, movieName, movieId }) {
         }
 
         const reservation = {
+            checkoutId: uuidv4(),
             movieName: movieName,
             movieId: movieId,
             screeningId: selectedSession,

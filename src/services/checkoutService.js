@@ -1,5 +1,23 @@
 import { apiMovieTheater } from "./apiClient";
 
+export async function getCheckout(user) {
+    try {
+        const response = await apiMovieTheater.get(`/users/${user}`);
+        let tickets = response.data.tickets;
+
+        if (tickets && tickets.length > 0) {
+            tickets = tickets.sort((a, b) => {
+                return a.status === b.status ? 0 : a.status ? -1 : 1;
+            });
+            return tickets;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        throw new Error("Error getting checkouts");
+    }
+}
+
 export async function saveCheckout(user, reservation) {
     try {
         const userData = await apiMovieTheater.get(`/users/${user}`);

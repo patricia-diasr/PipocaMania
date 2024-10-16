@@ -1,15 +1,8 @@
 import styles from "./Modal.module.css";
-import { useState } from "react";
 
-function Modal({ children }) {
-    const [show, setShow] = useState(true);
-
-    const toggleModal = () => {
-        setShow(!show);
-    };
-
+function Modal({ children, show, onClose }) {
     return (
-        <div className={`${styles.overlay} ${show ? styles.show : ""}`} onClick={toggleModal}>
+        <div className={`${styles.overlay} ${show ? styles.show : ""}`} onClick={onClose}>
             <div className={`${styles.modal} ${show ? styles.show : ""}`} onClick={(e) => e.stopPropagation()}>
                 {children}
             </div>

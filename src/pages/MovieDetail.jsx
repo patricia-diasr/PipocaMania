@@ -7,7 +7,7 @@ import { BsBookmark, BsCalendar, BsCurrencyDollar, BsBarChart, BsClock, BsStar }
 import { useState } from "react";
 
 function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
-    const [showModal, setShowModal] = useState(false);
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const { review: myReview, error, loading } = useGetMovieComment("1", movieId);
 
     const [newReview, setNewReview] = useState({
@@ -20,12 +20,20 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
     }
 
     function ratingChanged(newRating) {
-        setShowModal(true);
+        openModal();
         setNewReview({ ...newReview, stars: newRating });
     }
 
     function saveNewRating() {
-        setShowModal(false);
+        closeModal();
+    }
+
+    function openModal() {
+        setIsModalVisible(true);
+    }
+
+    function closeModal() {
+        setIsModalVisible(false);
     }
 
     const crewMap = new Map();
@@ -191,8 +199,8 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
                     )}
                 </section>
             </div>
-            {showModal && (
-                <Modal>
+            {isModalVisible && (
+                <Modal show={isModalVisible} onClose={closeModal}>
                     <div className={styles.newReview}>
                         <ReactStars
                             count={5}

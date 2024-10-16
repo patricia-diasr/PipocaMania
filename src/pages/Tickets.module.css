@@ -31,6 +31,7 @@
 
 .ticket.disabled {
     filter: opacity(0.4);
+    cursor: not-allowed;
 }
 
 .ticket h2 {
