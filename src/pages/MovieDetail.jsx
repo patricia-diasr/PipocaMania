@@ -15,8 +15,16 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
         comment: "",
     });
 
+    if (loading) {
+        return <p className="warning">Carregando avaliações...</p>;
+    }
+
+    if (error) {
+        return <p className="warning">Erro ao carregar avaliações.</p>;
+    }
+
     if (!movieDetails) {
-        return <p className="warning">Carregando...</p>;
+        return <p className="warning">Detalhes do filme não disponíveis.</p>;
     }
 
     function ratingChanged(newRating) {
@@ -37,7 +45,7 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
     }
 
     const crewMap = new Map();
-    movieCredits.crew.forEach((member) => {
+    movieCredits?.crew?.forEach((member) => {
         if (["Director", "Characters", "Writer"].includes(member.job)) {
             if (crewMap.has(member.name)) {
                 crewMap.get(member.name).push(member.job);
@@ -51,7 +59,6 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
 
     const formatCurrency = (amount) => {
         const currencySymbol = "US$";
-
         if (amount >= 1_000_000_000) {
             return `${currencySymbol}${(amount / 1_000_000_000).toFixed(1)}B`;
         } else if (amount >= 1_000_000) {
@@ -96,7 +103,7 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
                     <div className={styles.stars}>
                         <ReactStars
                             count={5}
-                            value={myReview.stars}
+                            value={myReview?.stars || 0} // Acesso seguro a myReview
                             isHalf={true}
                             onChange={ratingChanged}
                             size={35}
@@ -163,7 +170,7 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
                 <section className={styles.cast}>
                     <h2>Elenco</h2>
                     <div className={styles.people}>
-                        {movieCredits?.cast.slice(0, 6).map((person, index) => (
+                        {movieCredits?.cast?.slice(0, 6).map((person, index) => (
                             <div key={index} className={styles.person}>
                                 <img src={`https://image.tmdb.org/t/p/w185${person.profile_path}`} alt={person.name} />
                                 <p className={styles.name}>{person.name}</p>
@@ -175,7 +182,7 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
 
                 <section className={styles.comments}>
                     <h2>Avaliações</h2>
-                    {movieComments.length > 0 ? (
+                    {movieComments && movieComments.length > 0 ? (
                         movieComments.map((comment, index) => (
                             <div className={styles.comment} key={index}>
                                 <div className={styles.line}>
@@ -212,7 +219,7 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
                         />
                         <h3>Minha Avaliação</h3>
                         <textarea
-                            value={myReview.comment}
+                            value={newReview.comment}
                             onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
                             placeholder="Escreva sua avaliação aqui..."
                         ></textarea>

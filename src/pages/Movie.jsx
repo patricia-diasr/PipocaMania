@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import Submenu from "../components/Submenu";
@@ -18,6 +18,7 @@ function Movie() {
     const { screenings, errorScreening, loadingScreening } = useMovieScreenings(movieId);
 
     if (loadingMovie || loadingScreening) return <p className="warning">Carregando...</p>;
+
     if (errorMovie || errorScreening) return <p className="warning">Erro carregando informações</p>;
 
     return (
@@ -27,14 +28,19 @@ function Movie() {
             <Submenu setActivePage={setActivePage} />
 
             {activePage === "detail" ? (
-                <MovieDetail
-                    movieId={movieId}
-                    movieDetails={movieDetails}
-                    movieCredits={movieCredits}
-                    movieComments={movieComments}
-                />
+                // Verificando se movieDetails não é nulo antes de renderizar MovieDetail
+                movieDetails ? (
+                    <MovieDetail
+                        movieId={movieId}
+                        movieDetails={movieDetails}
+                        movieCredits={movieCredits}
+                        movieComments={movieComments}
+                    />
+                ) : (
+                    <p className="warning">Detalhes do filme não disponíveis.</p>
+                )
             ) : (
-                <MovieCheckout screenings={screenings} movieName={movieDetails.title} movieId={movieId} />
+                <MovieCheckout screenings={screenings} movieName={movieDetails?.title} movieId={movieId} />
             )}
         </>
     );

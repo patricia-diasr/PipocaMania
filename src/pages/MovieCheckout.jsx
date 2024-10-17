@@ -26,36 +26,28 @@ function MovieCheckout({ screenings, movieName, movieId }) {
 
     useEffect(() => {
         if (screenings) {
-            const dates = [...new Set(screenings.map((screening) => screening.date))];
+            const dates = [...new Set(screenings.map(screening => screening.date))];
             setAvailableDates(dates);
-            if (dates.length > 0) {
-                setSelectedDate(dates[0]);
-            }
+            if (dates.length > 0) setSelectedDate(dates[0]);
         }
     }, [screenings]);
 
     useEffect(() => {
         if (selectedDate && screenings) {
-            const filteredScreenings = screenings.filter((screening) => screening.date === selectedDate);
-
+            const filteredScreenings = screenings.filter(screening => screening.date === selectedDate);
             const timesGrouped = filteredScreenings.reduce((acc, screening) => {
                 const { time, type } = screening;
-                if (!acc[type]) {
-                    acc[type] = [];
-                }
-                if (!acc[type].includes(time)) {
-                    acc[type].push(time);
-                }
+                if (!acc[type]) acc[type] = [];
+                if (!acc[type].includes(time)) acc[type].push(time);
                 return acc;
             }, {});
 
-            const timesArray = Object.keys(timesGrouped).map((type) => ({
+            const timesArray = Object.keys(timesGrouped).map(type => ({
                 type,
                 options: timesGrouped[type],
             }));
 
             setAvailableTimes(timesArray);
-
             if (timesArray.length > 0 && timesArray[0].options.length > 0) {
                 setSelectedTime(`${timesArray[0].options[0]} - ${timesArray[0].type}`);
             }
@@ -64,13 +56,13 @@ function MovieCheckout({ screenings, movieName, movieId }) {
 
     useEffect(() => {
         if (selectedDate && selectedTime && screenings) {
-            const selectedScreening = screenings.find((screening) => {
+            const selectedScreening = screenings.find(screening => {
                 const [time, type] = selectedTime.split(" - ");
                 return screening.date === selectedDate && screening.time === time && screening.type === type;
             });
 
             if (selectedScreening) {
-                setSelectedSession(selectedScreening.id); // Atualiza o estado selectedSession
+                setSelectedSession(selectedScreening.id);
                 setSeatingData(selectedScreening.seats || []);
                 setSelectedSeats([]);
             }
@@ -80,9 +72,8 @@ function MovieCheckout({ screenings, movieName, movieId }) {
     const handleDateChange = (e) => setSelectedDate(e.target.value);
     const handleTimeChange = (e) => setSelectedTime(e.target.value);
     const handleTicketChange = (type, action) => {
-        setTickets((prevTickets) => {
-            const newValue =
-                action === "increment" ? prevTickets[type] + 1 : prevTickets[type] > 0 ? prevTickets[type] - 1 : 0;
+        setTickets(prevTickets => {
+            const newValue = action === "increment" ? prevTickets[type] + 1 : Math.max(prevTickets[type] - 1, 0);
             return { ...prevTickets, [type]: newValue };
         });
     };
@@ -90,9 +81,9 @@ function MovieCheckout({ screenings, movieName, movieId }) {
     const handleSeatSelection = (seat) => {
         if (seat.status === "booked") return;
 
-        setSeatingData((prevSeats) =>
-            prevSeats.map((row) =>
-                row.map((s) =>
+        setSeatingData(prevSeats =>
+            prevSeats.map(row =>
+                row.map(s =>
                     s && s.position === seat.position
                         ? { ...s, status: selectedSeats.includes(seat.position) ? "available" : "selected" }
                         : s
@@ -100,24 +91,21 @@ function MovieCheckout({ screenings, movieName, movieId }) {
             )
         );
 
-        setSelectedSeats((prevSeats) =>
+        setSelectedSeats(prevSeats =>
             prevSeats.includes(seat.position)
-                ? prevSeats.filter((pos) => pos !== seat.position)
+                ? prevSeats.filter(pos => pos !== seat.position)
                 : [...prevSeats, seat.position]
         );
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (!isFormValid) {
-            return;
-        }
+        if (!isFormValid()) return;
 
         const reservation = {
             checkoutId: uuidv4(),
-            movieName: movieName,
-            movieId: movieId,
+            movieName,
+            movieId,
             screeningId: selectedSession,
             date: selectedDate,
             time: selectedTime,
@@ -134,18 +122,21 @@ function MovieCheckout({ screenings, movieName, movieId }) {
         try {
             await submitCheckout(user, reservation, seatingData);
             setModalMessage("Compra realizada com sucesso!");
-
-            setSelectedDate("");
-            setSelectedTime("");
-            setSelectedSession(null);
-            setTickets({ full: 0, half: 0 });
-            setSelectedSeats([]);
+            resetForm();
         } catch (err) {
             setModalMessage("Ocorreu um erro ao realizar a compra. Tente novamente.");
         }
     };
 
-    const isFormValid =
+    const resetForm = () => {
+        setSelectedDate("");
+        setSelectedTime("");
+        setSelectedSession(null);
+        setTickets({ full: 0, half: 0 });
+        setSelectedSeats([]);
+    };
+
+    const isFormValid = () =>
         selectedDate &&
         selectedTime &&
         (tickets.full > 0 || tickets.half > 0) &&
@@ -158,7 +149,7 @@ function MovieCheckout({ screenings, movieName, movieId }) {
                     <h2>Selecione o dia</h2>
                     <select name="date" value={selectedDate} onChange={handleDateChange}>
                         <option value="">Selecione a data</option>
-                        {availableDates.map((date) => (
+                        {availableDates.map(date => (
                             <option key={date} value={date}>
                                 {date}
                             </option>
@@ -171,7 +162,7 @@ function MovieCheckout({ screenings, movieName, movieId }) {
                         availableTimes.map(({ type, options }) => (
                             <div key={type} className={styles.sessionType}>
                                 <h3>{type}</h3>
-                                {options.map((time) => (
+                                {options.map(time => (
                                     <label key={`${time}-${type}`}>
                                         <input
                                             type="radio"
@@ -186,7 +177,7 @@ function MovieCheckout({ screenings, movieName, movieId }) {
                             </div>
                         ))}
                 </section>
-                <section className={styles.selectSits}>
+                <section className={styles.selectSeats}>
                     <h2>Selecione os assentos</h2>
                     <Seatmap seatingData={seatingData} onSeatSelect={handleSeatSelection} />
                 </section>
@@ -220,7 +211,7 @@ function MovieCheckout({ screenings, movieName, movieId }) {
                         <p className={styles.price}>R$ 15,00</p>
                     </div>
                 </section>
-                <button type="submit" disabled={!isFormValid}>
+                <button type="submit" disabled={!isFormValid()}>
                     Aplicar
                 </button>
             </form>
