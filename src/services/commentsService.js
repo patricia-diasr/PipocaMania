@@ -29,3 +29,16 @@ export async function getMovieCommentByUser(user, movie) {
         throw new Error(`Error fetching movie comments for movie ID ${id}`);
     }
 }
+
+export async function saveComment(movieId, comment) {
+    try {
+        const movieData = await apiMovieTheater.get(`/movies/${movieId}`);
+        const updateComments = [...movieData.data.comments, comment];
+
+        await apiMovieTheater.patch(`/movies/${movieId}`, {
+            comments: updateComments,
+        });
+    } catch (error) {
+        throw new Error("Error submitting comment");
+    }
+}

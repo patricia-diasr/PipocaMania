@@ -1,234 +1,241 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
-
-import styles from "./MovieCheckout.module.css";
-import Seatmap from "../components/Seatmap";
-import useCheckout from "../hooks/useCheckout";
+import ReactStars from "react-rating-stars-component";
+import styles from "./MovieDetail.module.css";
 import Modal from "../components/Modal";
+import useGetMovieComment from "../hooks/useGetMovieComment";
+import useNewReview from "../hooks/useNewReview";
+import { BsBookmark, BsCalendar, BsCurrencyDollar, BsBarChart, BsClock, BsStar } from "react-icons/bs";
+import { useState } from "react";
 
-function MovieCheckout({ screenings, movieName, movieId }) {
-    const [selectedDate, setSelectedDate] = useState("");
-    const [selectedTime, setSelectedTime] = useState("");
-    const [selectedSession, setSelectedSession] = useState(null);
-    const [tickets, setTickets] = useState({ full: 0, half: 0 });
-    const [selectedSeats, setSelectedSeats] = useState([]);
-    const [availableDates, setAvailableDates] = useState([]);
-    const [availableTimes, setAvailableTimes] = useState([]);
-    const [seatingData, setSeatingData] = useState([]);
-    const [modalMessage, setModalMessage] = useState("");
-    const [showModal, setShowModal] = useState(false);
-    const { submitCheckout, loading, error, success } = useCheckout();
+function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const { review: myReview, error, loading } = useGetMovieComment("1", movieId);
+    const { submitReview, loadingComment, errorComment, success } = useNewReview();
 
-    if (!screenings) {
-        return <p className="warning">Não há sessões disponíveis para esse filme</p>;
+    const [newReview, setNewReview] = useState({
+        stars: 0,
+        comment: "",
+    });
+
+    if (loading) {
+        return <p className="warning">Carregando avaliações...</p>;
     }
 
-    useEffect(() => {
-        if (screenings) {
-            const dates = [...new Set(screenings.map((screening) => screening.date))];
-            setAvailableDates(dates);
-            if (dates.length > 0) {
-                setSelectedDate(dates[0]);
-            }
-        }
-    }, [screenings]);
+    if (error) {
+        return <p className="warning">Erro ao carregar avaliações.</p>;
+    }
 
-    useEffect(() => {
-        if (selectedDate && screenings) {
-            const filteredScreenings = screenings.filter((screening) => screening.date === selectedDate);
+    if (!movieDetails) {
+        return <p className="warning">Detalhes do filme não disponíveis.</p>;
+    }
 
-            const timesGrouped = filteredScreenings.reduce((acc, screening) => {
-                const { time, type } = screening;
-                if (!acc[type]) {
-                    acc[type] = [];
-                }
-                if (!acc[type].includes(time)) {
-                    acc[type].push(time);
-                }
-                return acc;
-            }, {});
+    function ratingChanged(newRating) {
+        setNewReview({ ...newReview, stars: newRating });
+        openModal();
+    }
 
-            const timesArray = Object.keys(timesGrouped).map((type) => ({
-                type,
-                options: timesGrouped[type],
-            }));
-
-            setAvailableTimes(timesArray);
-
-            if (timesArray.length > 0 && timesArray[0].options.length > 0) {
-                setSelectedTime(`${timesArray[0].options[0]} - ${timesArray[0].type}`);
-            }
-        }
-    }, [selectedDate, screenings]);
-
-    useEffect(() => {
-        if (selectedDate && selectedTime && screenings) {
-            const selectedScreening = screenings.find((screening) => {
-                const [time, type] = selectedTime.split(" - ");
-                return screening.date === selectedDate && screening.time === time && screening.type === type;
-            });
-
-            if (selectedScreening) {
-                setSelectedSession(selectedScreening.id); // Atualiza o estado selectedSession
-                setSeatingData(selectedScreening.seats || []);
-                setSelectedSeats([]);
-            }
-        }
-    }, [selectedDate, selectedTime, screenings]);
-
-    const handleDateChange = (e) => setSelectedDate(e.target.value);
-    const handleTimeChange = (e) => setSelectedTime(e.target.value);
-    const handleTicketChange = (type, action) => {
-        setTickets((prevTickets) => {
-            const newValue =
-                action === "increment" ? prevTickets[type] + 1 : prevTickets[type] > 0 ? prevTickets[type] - 1 : 0;
-            return { ...prevTickets, [type]: newValue };
-        });
-    };
-
-    const handleSeatSelection = (seat) => {
-        if (seat.status === "booked") return;
-
-        setSeatingData((prevSeats) =>
-            prevSeats.map((row) =>
-                row.map((s) =>
-                    s && s.position === seat.position
-                        ? { ...s, status: selectedSeats.includes(seat.position) ? "available" : "selected" }
-                        : s
-                )
-            )
-        );
-
-        setSelectedSeats((prevSeats) =>
-            prevSeats.includes(seat.position)
-                ? prevSeats.filter((pos) => pos !== seat.position)
-                : [...prevSeats, seat.position]
-        );
-    };
-
-    const handleSubmit = async (e) => {
+    async function handleSubmit(e) {
         e.preventDefault();
 
-        if (!isFormValid) {
-            return;
-        }
-
-        const reservation = {
-            checkoutId: uuidv4(),
-            movieName: movieName,
-            movieId: movieId,
-            screeningId: selectedSession,
-            date: selectedDate,
-            time: selectedTime,
-            tickets,
-            selectedSeats,
-            status: true,
-        };
-
-        const user = "1";
-
-        setModalMessage("Enviando a compra...");
-        setShowModal(true);
-
         try {
-            await submitCheckout(user, reservation, seatingData);
-            setModalMessage("Compra realizada com sucesso!");
+            await submitReview(user, movieId, newReview);
+            closeModal();
+            setNewReview({ stars: 0, comment: "" });
+        } catch (error) {
+            console.error("Erro ao enviar avaliação:", error);
+        }
+    }
 
-            setSelectedDate("");
-            setSelectedTime("");
-            setSelectedSession(null);
-            setTickets({ full: 0, half: 0 });
-            setSelectedSeats([]);
-        } catch (err) {
-            setModalMessage("Ocorreu um erro ao realizar a compra. Tente novamente.");
+    function openModal() {
+        setIsModalVisible(true);
+    }
+
+    function closeModal() {
+        setIsModalVisible(false);
+    }
+
+    const crewMap = new Map();
+    movieCredits?.crew?.forEach((member) => {
+        if (["Director", "Characters", "Writer"].includes(member.job)) {
+            if (crewMap.has(member.name)) {
+                crewMap.get(member.name).push(member.job);
+            } else {
+                crewMap.set(member.name, [member.job]);
+            }
+        }
+    });
+
+    const filmCreators = Array.from(crewMap, ([name, jobs]) => ({ name, jobs }));
+
+    const formatCurrency = (amount) => {
+        const currencySymbol = "US$";
+        if (amount >= 1_000_000_000) {
+            return `${currencySymbol}${(amount / 1_000_000_000).toFixed(1)}B`;
+        } else if (amount >= 1_000_000) {
+            return `${currencySymbol}${(amount / 1_000_000).toFixed(1)}M`;
+        } else if (amount >= 1_000) {
+            return `${currencySymbol}${(amount / 1_000).toFixed(1)}K`;
+        } else {
+            return `${currencySymbol}${amount.toLocaleString()}`;
         }
     };
 
-    const isFormValid =
-        selectedDate &&
-        selectedTime &&
-        (tickets.full > 0 || tickets.half > 0) &&
-        tickets.half + tickets.full === selectedSeats.length;
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return new Intl.DateTimeFormat("pt-BR", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+        }).format(date);
+    }
+
+    function formatRuntime(minutes) {
+        const hours = Math.floor(minutes / 60);
+        const mins = minutes % 60;
+        return `${hours}h ${mins}m`;
+    }
+
+    function formatVote(vote) {
+        const votePorcent = Math.floor(vote * 10);
+        return `${votePorcent}%`;
+    }
+
+    function isFutureRelease(releaseDate) {
+        const today = new Date();
+        const release = new Date(releaseDate);
+        return release > today;
+    }
 
     return (
         <div>
-            <form onSubmit={handleSubmit} className={styles.movieCheckout}>
-                <section className={styles.selectDay}>
-                    <h2>Selecione o dia</h2>
-                    <select name="date" value={selectedDate} onChange={handleDateChange}>
-                        <option value="">Selecione a data</option>
-                        {availableDates.map((date) => (
-                            <option key={date} value={date}>
-                                {date}
-                            </option>
-                        ))}
-                    </select>
+            <div className={styles.movieDetail}>
+                <section className={styles.options}>
+                    <div className={styles.stars}>
+                        <ReactStars
+                            count={5}
+                            value={myReview?.stars || 0}
+                            isHalf={true}
+                            onChange={ratingChanged}
+                            size={35}
+                            activeColor="#ffd700"
+                        />
+                    </div>
+                    <BsBookmark className={styles.icon} />
                 </section>
-                <section className={styles.selectTime}>
-                    <h2>Selecione o horário</h2>
-                    {availableTimes.length > 0 &&
-                        availableTimes.map(({ type, options }) => (
-                            <div key={type} className={styles.sessionType}>
-                                <h3>{type}</h3>
-                                {options.map((time) => (
-                                    <label key={`${time}-${type}`}>
-                                        <input
-                                            type="radio"
-                                            name="time"
-                                            value={`${time} - ${type}`}
-                                            checked={selectedTime === `${time} - ${type}`}
-                                            onChange={handleTimeChange}
-                                        />
-                                        <span>{time}</span>
-                                    </label>
-                                ))}
+
+                <section className={styles.about}>
+                    <h1>{movieDetails.title}</h1>
+                    <h2>Sinopse</h2>
+                    <p>{movieDetails.overview}</p>
+                </section>
+
+                <section className={styles.filmCreators}>
+                    {filmCreators.map((member, index) => (
+                        <div key={index} className={styles.filmCreator}>
+                            <p className={styles.name}>{member.name}</p>
+                            <p className={styles.job}>{member.jobs.join(", ")}</p>
+                        </div>
+                    ))}
+                </section>
+
+                <section className={styles.info}>
+                    <div className={styles.infoBox}>
+                        <div className={styles.infoLine}>
+                            <BsStar className={styles.icon} />
+                            <p>
+                                <strong>Avaliação:</strong> {formatVote(movieDetails.vote_average)}
+                            </p>
+                        </div>
+
+                        <div className={styles.infoLine}>
+                            <BsClock className={styles.icon} />
+                            <p>
+                                <strong>Duração:</strong> {formatRuntime(movieDetails.runtime)}
+                            </p>
+                        </div>
+
+                        <div className={styles.infoLine}>
+                            <BsCalendar className={styles.icon} />
+                            <p>
+                                <strong>Lançamento:</strong> {formatDate(movieDetails.release_date)}
+                            </p>
+                        </div>
+
+                        <div className={styles.infoLine}>
+                            <BsCurrencyDollar className={styles.icon} />
+                            <p>
+                                <strong>Orçamento:</strong> {formatCurrency(movieDetails.budget)}
+                            </p>
+                        </div>
+
+                        <div className={styles.infoLine}>
+                            <BsBarChart className={styles.icon} />
+                            <p>
+                                <strong>Receita:</strong> {formatCurrency(movieDetails.revenue)}
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section className={styles.cast}>
+                    <h2>Elenco</h2>
+                    <div className={styles.people}>
+                        {movieCredits?.cast?.slice(0, 6).map((person, index) => (
+                            <div key={index} className={styles.person}>
+                                <img src={`https://image.tmdb.org/t/p/w185${person.profile_path}`} alt={person.name} />
+                                <p className={styles.name}>{person.name}</p>
+                                <p className={styles.job}>{person.character}</p>
                             </div>
                         ))}
-                </section>
-                <section className={styles.selectSits}>
-                    <h2>Selecione os assentos</h2>
-                    <Seatmap seatingData={seatingData} onSeatSelect={handleSeatSelection} />
-                </section>
-                <section className={styles.selectTickets}>
-                    <h2>Selecione os ingressos</h2>
-                    <div className={styles.ticketType}>
-                        <h3>Inteiras</h3>
-                        <div className={styles.inputNumber}>
-                            <button type="button" onClick={() => handleTicketChange("full", "decrement")}>
-                                -
-                            </button>
-                            <span>{tickets.full}</span>
-                            <button type="button" onClick={() => handleTicketChange("full", "increment")}>
-                                +
-                            </button>
-                        </div>
-                        <p className={styles.price}>R$ 30,00</p>
                     </div>
+                </section>
 
-                    <div className={styles.ticketType}>
-                        <h3>Meia Entrada</h3>
-                        <div className={styles.inputNumber}>
-                            <button type="button" onClick={() => handleTicketChange("half", "decrement")}>
-                                -
-                            </button>
-                            <span>{tickets.half}</span>
-                            <button type="button" onClick={() => handleTicketChange("half", "increment")}>
-                                +
-                            </button>
-                        </div>
-                        <p className={styles.price}>R$ 15,00</p>
-                    </div>
+                <section className={styles.comments}>
+                    <h2>Avaliações</h2>
+                    {movieComments && movieComments.length > 0 ? (
+                        movieComments.map((comment, index) => (
+                            <div className={styles.comment} key={index}>
+                                <div className={styles.line}>
+                                    <p className={styles.name}>{comment.name}</p>
+                                    <div className={styles.stars}>
+                                        <ReactStars
+                                            count={5}
+                                            value={comment.stars}
+                                            edit={false}
+                                            isHalf={true}
+                                            size={25}
+                                            activeColor="#ffd700"
+                                        />
+                                    </div>
+                                </div>
+                                <p className={styles.description}>{comment.comment}</p>
+                            </div>
+                        ))
+                    ) : (
+                        <p>Não há avaliações</p>
+                    )}
                 </section>
-                <button type="submit" disabled={!isFormValid}>
-                    Aplicar
-                </button>
-            </form>
-            {showModal && (
-                <Modal>
-                    <div className={styles.checkoutInfo}>
-                        <h2>{modalMessage}</h2>
-                        <Link to="/tickets">Ver ingressos</Link>
+            </div>
+            {isModalVisible && (
+                <Modal show={isModalVisible} onClose={closeModal}>
+                    <div className={styles.newReview}>
+                        <ReactStars
+                            count={5}
+                            value={newReview.stars}
+                            isHalf={true}
+                            onChange={(rating) => setNewReview({ ...newReview, stars: rating })}
+                            size={35}
+                            activeColor="#ffd700"
+                        />
+                        <h3>Minha Avaliação</h3>
+                        <textarea
+                            value={newReview.comment}
+                            onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
+                            placeholder="Escreva sua avaliação aqui..."
+                        ></textarea>
+                        <button type="submit" onClick={handleSubmit} disabled={loadingComment}>
+                            {loadingComment ? "Enviando..." : "Salvar"}
+                        </button>
+                        {errorComment && <p className={styles.error}>{errorComment}</p>}
                     </div>
                 </Modal>
             )}
@@ -236,4 +243,4 @@ function MovieCheckout({ screenings, movieName, movieId }) {
     );
 }
 
-export default MovieCheckout;
+export default MovieDetail;

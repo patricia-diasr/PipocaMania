@@ -20,3 +20,24 @@ export async function getUserMovieLists(user) {
         throw new Error("Error fetching user movie lists");
     }
 }
+
+export async function addMovieReviewList(user, movie) {
+    try {
+        const userData = await apiMovieTheater.get(`/users/${user}`);
+        let reviews = userData.data.myReviews;
+
+        const movieIndex = reviews.findIndex((review) => review.id === movie.id);
+
+        if (movieIndex !== -1) {
+            reviews[movieIndex] = movie;
+        } else {
+            reviews = [...reviews, movie];
+        }
+
+        await apiMovieTheater.patch(`/users/${user}`, {
+            myReviews: reviews,
+        });
+    } catch (error) {
+        throw new Error("Error updating user reviews lists");
+    }
+}

@@ -2,13 +2,16 @@ import ReactStars from "react-rating-stars-component";
 import styles from "./MovieDetail.module.css";
 import Modal from "../components/Modal";
 import useGetMovieComment from "../hooks/useGetMovieComment";
-
+import useNewReview from "../hooks/useNewReview";
 import { BsBookmark, BsCalendar, BsCurrencyDollar, BsBarChart, BsClock, BsStar } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
+    const navigate = useNavigate();
     const [isModalVisible, setIsModalVisible] = useState(false);
     const { review: myReview, error, loading } = useGetMovieComment("1", movieId);
+    const { submitReview, loadingComment, errorComment, success } = useNewReview();
 
     const [newReview, setNewReview] = useState({
         stars: 0,
@@ -28,12 +31,35 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
     }
 
     function ratingChanged(newRating) {
-        openModal();
         setNewReview({ ...newReview, stars: newRating });
+        openModal();
     }
 
-    function saveNewRating() {
-        closeModal();
+    async function handleSubmit(e) {
+        e.preventDefault();
+        const userId = "1";
+
+        try {
+            const comment = {
+                stars: newReview.stars,
+                name: "Patrícia Rodrigues",
+                comment: newReview.comment,
+            };
+
+            const review = {
+                id: movieId,
+                poster_path: movieDetails.poster_path,
+                stars: newReview.stars,
+                comment: movieDetails.comment,
+            };
+
+            await submitReview(userId, movieId, comment, review);
+            closeModal();
+            setNewReview({ stars: 0, comment: "" });
+            navigate(0);
+        } catch (error) {
+            console.error("Erro ao enviar avaliação:", error);
+        }
     }
 
     function openModal() {
@@ -103,7 +129,7 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
                     <div className={styles.stars}>
                         <ReactStars
                             count={5}
-                            value={myReview?.stars || 0} // Acesso seguro a myReview
+                            value={myReview?.stars || 0}
                             isHalf={true}
                             onChange={ratingChanged}
                             size={35}
@@ -213,7 +239,7 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
                             count={5}
                             value={newReview.stars}
                             isHalf={true}
-                            onChange={ratingChanged}
+                            onChange={(rating) => setNewReview({ ...newReview, stars: rating })}
                             size={35}
                             activeColor="#ffd700"
                         />
@@ -223,9 +249,10 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
                             onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
                             placeholder="Escreva sua avaliação aqui..."
                         ></textarea>
-                        <button type="submit" onClick={saveNewRating}>
-                            Salvar
+                        <button type="submit" onClick={handleSubmit} disabled={loadingComment}>
+                            {loadingComment ? "Enviando..." : "Salvar"}
                         </button>
+                        {errorComment && <p className={styles.error}>{errorComment}</p>}
                     </div>
                 </Modal>
             )}
