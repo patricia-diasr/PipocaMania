@@ -12,6 +12,26 @@ export async function getUpcomingMovies() {
     }
 }
 
+export async function getPopularMovies() {
+    try {
+        const response = await apiMovies.get(`/movie/popular?api_key=${API_KEY}&language=pt-BR&region=BR`);
+        return response.data.results;
+    } catch (error) {
+        throw new Error("Error fetching popular movies");
+    }
+}
+
+export async function searchMovies(query) {
+    try {
+        const response = await apiMovies.get(
+            `/search/movie?api_key=${API_KEY}&language=pt-BR&query=${encodeURIComponent(query)}&region=BR`
+        );
+        return response.data.results;
+    } catch (error) {
+        throw new Error("Error fetching movies by name");
+    }
+}
+
 export async function getUserMovieLists(user) {
     try {
         const response = await apiMovieTheater.get(`/users/${user}`);
