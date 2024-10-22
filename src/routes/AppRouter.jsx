@@ -5,14 +5,13 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Signin from "../pages/Signin";
 import Movie from "../pages/Movie";
-import MovieDetail from "../pages/MovieDetail";
-import MovieCheckout from "../pages/MovieCheckout";
 import NotFound from "../pages/NotFound";
 import Tickets from "../pages/Tickets";
 
 import Header from "../components/Header";
 import Menu from "../components/Menu";
 import Lists from "../pages/Lists";
+import Search from "../pages/Search";
 
 function AppLayout() {
     return (
@@ -40,6 +39,7 @@ function AppRouter() {
                     <Route path="/lists" element={<Lists />} />
                     <Route path="/tickets" element={<Tickets />} />
                     <Route path="movie/:movieId" element={<Movie />} />
+                    <Route path="/search" element={<Search />} />
                 </Route>
 
                 <Route path="*" element={<NotFound />} />
