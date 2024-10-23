@@ -12985,6 +12985,9 @@
         {
             "name": "Patrícia Rodrigues",
             "id": "1",
+            "login": "patricia.rodrigues",
+            "password": "senha123",
+            "admin": false,
             "tickets": [
                 {
                     "checkoutId": "129b5e49-9e53-42d2-9f64-898910c03e66",
