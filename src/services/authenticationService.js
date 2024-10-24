@@ -5,7 +5,7 @@ export async function login(loginData) {
         const response = await apiMovieTheater.get(`/users`);
         const usersData = response.data;
 
-        const user = usersData.find(user => user.login === loginData.login);
+        const user = usersData.find((user) => user.login === loginData.login);
 
         if (user && user.password === loginData.password) {
             return {
@@ -13,8 +13,8 @@ export async function login(loginData) {
                 user: {
                     name: user.name,
                     id: user.id,
-                    admin: user.admin
-                }
+                    role: user.role,
+                },
             };
         } else {
             throw new Error("Invalid login or password");

@@ -29,6 +29,8 @@ function Login() {
             const loginData = await login({ login: username, password });
 
             if (loginData) {
+                localStorage.setItem("user", JSON.stringify(loginData.user));
+                document.body.style.overflow = "auto";
                 navigate("/home");
             }
         } catch (err) {

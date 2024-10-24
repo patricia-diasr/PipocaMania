@@ -4,7 +4,7 @@ import useGetCheckout from "../hooks/useGetCheckout";
 import { useState } from "react";
 
 function Tickets() {
-    const user = 1;
+    const user = JSON.parse(localStorage.getItem("user")).id;
     const { tickets, error, loading } = useGetCheckout(user);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedTicket, setSelectedTicket] = useState(false);

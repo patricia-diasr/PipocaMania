@@ -9,8 +9,10 @@ import { useState } from "react";
 
 function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
     const navigate = useNavigate();
+    const userId = JSON.parse(localStorage.getItem("user")).id;
+
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const { review: myReview, error, loading } = useGetMovieComment("1", movieId);
+    const { review: myReview, error, loading } = useGetMovieComment(userId, movieId);
     const { submitReview, loadingComment, errorComment, success } = useNewReview();
 
     const [newReview, setNewReview] = useState({
@@ -37,12 +39,12 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        const userId = "1";
+        const user = JSON.parse(localStorage.getItem("user"));
 
         try {
             const comment = {
                 stars: newReview.stars,
-                name: "Patrícia Rodrigues",
+                name: user.name,
                 comment: newReview.comment,
             };
 
@@ -53,7 +55,7 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
                 comment: movieDetails.comment,
             };
 
-            await submitReview(userId, movieId, comment, review);
+            await submitReview(user.id, movieId, comment, review);
             closeModal();
             setNewReview({ stars: 0, comment: "" });
             navigate(0);

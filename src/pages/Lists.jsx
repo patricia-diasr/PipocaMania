@@ -3,7 +3,7 @@ import useMovieLists from "../hooks/useMovieLists";
 import styles from "./Lists.module.css";
 
 function Lists() {
-    const user = 1;
+    const user = JSON.parse(localStorage.getItem("user")).id;
     const { watchlist, remindMeWhenReleased, myReviews, error, loading } = useMovieLists(user);
 
     if (loading) {
