@@ -31,7 +31,12 @@ function Login() {
             if (loginData) {
                 localStorage.setItem("user", JSON.stringify(loginData.user));
                 document.body.style.overflow = "auto";
-                navigate("/home");
+
+                if (loginData.user.role === "client") {
+                    navigate("/home");
+                } else {
+                    navigate("/search");
+                }
             }
         } catch (err) {
             setError("Senha ou login inválidos");

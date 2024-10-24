@@ -9,9 +9,6 @@ function useAuth() {
 function PrivateRoute({ requiredRole }) {
     const user = useAuth();
 
-    console.log(user);
-    console.log(requiredRole);
-
     if (!user || user.role !== requiredRole) {
         return <Navigate to="/login" />;
     }

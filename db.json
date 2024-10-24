@@ -12986,7 +12986,7 @@
             "name": "Admin",
             "id": "1",
             "login": "admin",
-            "password": "senha123",
+            "password": "123",
             "role": "admin"
         },
         {
