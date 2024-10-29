@@ -1,9 +1,10 @@
 import styles from "./Login.module.css";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../services/authenticationService";
+import { signup } from "../services/authenticationService";
 
-function Login() {
+function Signup() {
+    const [name, setName] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -26,7 +27,7 @@ function Login() {
         setError("");
 
         try {
-            const loginData = await login({ login: username, password });
+            const loginData = await signup({ login: username, password, name });
 
             if (loginData) {
                 localStorage.setItem("user", JSON.stringify(loginData.user));
@@ -39,7 +40,7 @@ function Login() {
                 }
             }
         } catch (err) {
-            setError("Senha ou login inválidos");
+            setError("Algo deu errado");
         } finally {
             setLoading(false);
         }
@@ -49,9 +50,20 @@ function Login() {
         <div className={styles.login}>
             <div className={styles.loginContainer}>
                 <div className={styles.loginContent}>
-                    <h2>Faça seu login</h2>
+                    <h2>Faça seu cadastro</h2>
                     {error && <p className={styles.error}>{error}</p>}
                     <form onSubmit={handleSubmit}>
+                        <label htmlFor="name">Nome</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                        <span></span>
+
                         <label htmlFor="username">User Name</label>
                         <input
                             type="text"
@@ -75,14 +87,14 @@ function Login() {
                         <span></span>
 
                         <button type="submit" disabled={loading}>
-                            {loading ? "Entrando..." : "Entrar"}
+                            {loading ? "Cadastrnado..." : "Cadastrar"}
                         </button>
                     </form>
-                    <Link to="/signup">Não tem cadastro? Registre-se aqui</Link>
+                    <Link to="/login">Já possuí cadastro? Faça login aqui</Link>
                 </div>
             </div>
         </div>
     );
 }
 
-export default Login;
+export default Signup;

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-
 
 import Home from "../pages/Home";
 import Login from "../pages/Login";
-import Signin from "../pages/Signin";
+import Signup from "../pages/Signup";
 import Movie from "../pages/Movie";
 import NotFound from "../pages/NotFound";
 import Tickets from "../pages/Tickets";
@@ -32,7 +32,7 @@ function AppRouter() {
                 <Route path="/" element={<Navigate to="/home" />} />
 
                 <Route path="/login" element={<Login />} />
-                <Route path="/signin" element={<Signin />} />
+                <Route path="/signup" element={<Signup />} />
 
                 <Route element={<PrivateRoute requiredRole="client" />}>
                     <Route element={<AppLayout />}>

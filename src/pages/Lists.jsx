@@ -4,7 +4,7 @@ import styles from "./Lists.module.css";
 
 function Lists() {
     const user = JSON.parse(localStorage.getItem("user")).id;
-    const { watchlist, remindMeWhenReleased, myReviews, error, loading } = useMovieLists(user);
+    const { watchlist, myReviews, error, loading } = useMovieLists(user);
 
     if (loading) {
         return <div>Carregando...</div>;
@@ -14,7 +14,7 @@ function Lists() {
         return <div>Erro: {error}</div>;
     }
 
-    if (!watchlist || !remindMeWhenReleased || !myReviews) {
+    if (!watchlist || !myReviews) {
         return <div>Listas não encontradas.</div>;
     }
 
@@ -24,7 +24,6 @@ function Lists() {
                 <h1>Minhas Listas</h1>
                 <MovieList list={myReviews} title="Minhas avaliaçõoes" />
                 <MovieList list={watchlist} title="Quero assistir" />
-                <MovieList list={remindMeWhenReleased} title="Avise-me quando lançar" />
             </section>
         </div>
     );

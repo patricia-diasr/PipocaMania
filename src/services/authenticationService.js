@@ -23,3 +23,32 @@ export async function login(loginData) {
         throw new Error(`Error during login: ${error.message}`);
     }
 }
+
+export async function signup(signupData) {
+    try {
+        const response = await apiMovieTheater.post(`/users`, {
+            name: signupData.name,
+            login: signupData.login,
+            password: signupData.password,
+            role: "client", 
+            tickets: [],
+            watchlist: [],
+            myReviews: []
+        });
+
+        if (response.status === 201) {
+            return {
+                message: "Signup successful",
+                user: {
+                    name: response.data.name,
+                    id: response.data.id,
+                    role: response.data.role,
+                },
+            };
+        } else {
+            throw new Error("Failed to sign up");
+        }
+    } catch (error) {
+        throw new Error(`Error during signup: ${error.message}`);
+    }
+}
