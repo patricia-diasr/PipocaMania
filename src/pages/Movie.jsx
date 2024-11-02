@@ -28,7 +28,6 @@ function Movie() {
             <Submenu setActivePage={setActivePage} />
 
             {activePage === "detail" ? (
-                // Verificando se movieDetails não é nulo antes de renderizar MovieDetail
                 movieDetails ? (
                     <MovieDetail
                         movieId={movieId}

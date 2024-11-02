@@ -3,15 +3,18 @@ import styles from "./MovieDetail.module.css";
 import Modal from "../components/Modal";
 import useGetMovieComment from "../hooks/useGetMovieComment";
 import useNewReview from "../hooks/useNewReview";
-import { BsBookmark, BsCalendar, BsCurrencyDollar, BsBarChart, BsClock, BsStar } from "react-icons/bs";
+import { searchWatchList, addMovieWatchList, removeMovieWatchList } from "../services/listService";
+import { BsBookmark, BsBookmarkFill, BsCalendar, BsCurrencyDollar, BsBarChart, BsClock, BsStar } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
     const navigate = useNavigate();
     const userId = JSON.parse(localStorage.getItem("user")).id;
 
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isInWatchlist, setIsInWatchlist] = useState(false);
+
     const { review: myReview, error, loading } = useGetMovieComment(userId, movieId);
     const { submitReview, loadingComment, errorComment, success } = useNewReview();
 
@@ -19,6 +22,10 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
         stars: 0,
         comment: "",
     });
+
+    useEffect(() => {
+        checkWatchlist();
+    }, [movieId]);
 
     if (loading) {
         return <p className="warning">Carregando avaliações...</p>;
@@ -35,6 +42,31 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
     function ratingChanged(newRating) {
         setNewReview({ ...newReview, stars: newRating });
         openModal();
+    }
+
+    async function checkWatchlist() {
+        try {
+            const inWatchlist = await searchWatchList(userId, movieId);
+            setIsInWatchlist(!!inWatchlist);
+        } catch (error) {
+            console.error("Erro ao verificar a lista de watchlist:", error);
+        }
+    }
+
+    async function toggleWatchlist() {
+        try {
+            const user = JSON.parse(localStorage.getItem("user"));
+
+            if (isInWatchlist) {
+                await removeMovieWatchList(user.id, movieId);
+                setIsInWatchlist(false);
+            } else {
+                await addMovieWatchList(user.id, { id: movieId, poster_path: movieDetails.poster_path });
+                setIsInWatchlist(true);
+            }
+        } catch (error) {
+            console.error("Erro ao atualizar a lista de watchlist:", error);
+        }
     }
 
     async function handleSubmit(e) {
@@ -118,12 +150,6 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
         return `${votePorcent}%`;
     }
 
-    function isFutureRelease(releaseDate) {
-        const today = new Date();
-        const release = new Date(releaseDate);
-        return release > today;
-    }
-
     return (
         <div>
             <div className={styles.movieDetail}>
@@ -138,7 +164,12 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
                             activeColor="#ffd700"
                         />
                     </div>
-                    <BsBookmark className={styles.icon} />
+
+                    {isInWatchlist ? (
+                        <BsBookmarkFill className={styles.icon} onClick={toggleWatchlist} style={{ fill: "#f79e44" }} />
+                    ) : (
+                        <BsBookmark className={styles.icon} onClick={toggleWatchlist} />
+                    )}
                 </section>
 
                 <section className={styles.about}>

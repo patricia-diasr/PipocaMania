@@ -61,3 +61,51 @@ export async function addMovieReviewList(user, movie) {
         throw new Error("Error updating user reviews lists");
     }
 }
+
+export async function searchWatchList(user, movieId) {
+    try {
+        const userData = await apiMovieTheater.get(`/users/${user}`);
+        const list = userData.data.watchlist;
+
+        const isInWatchList = list.find((movie) => movie.id === movieId);
+        return isInWatchList;
+    } catch (error) {
+        throw new Error("Error searching movie in watchlist");
+    }
+}
+
+export async function addMovieWatchList(user, movie) {
+    try {
+        const userData = await apiMovieTheater.get(`/users/${user}`);
+        let watchlist = userData.data.watchlist || [];
+
+        const movieIndex = watchlist.findIndex((item) => item.id === movie.id);
+
+        if (movieIndex === -1) {
+            watchlist.push(movie);
+        } else {
+            console.log("Movie already in your watchlist");
+        }
+
+        await apiMovieTheater.patch(`/users/${user}`, {
+            watchlist: watchlist,
+        });
+    } catch (error) {
+        throw new Error("Error updating watchlist");
+    }
+}
+
+export async function removeMovieWatchList(user, movieId) {
+    try {
+        const userData = await apiMovieTheater.get(`/users/${user}`);
+        let watchlist = userData.data.watchlist || [];
+
+        watchlist = watchlist.filter((movie) => movie.id !== movieId);
+
+        await apiMovieTheater.patch(`/users/${user}`, {
+            watchlist: watchlist,
+        });
+    } catch (error) {
+        throw new Error("Error updating watchlist");
+    }
+}

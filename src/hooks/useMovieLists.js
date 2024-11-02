@@ -25,7 +25,7 @@ function useMovieLists(user) {
         fetchMovieLists();
     }, [user]);
 
-    return { watchlist, remindMeWhenReleased, myReviews, error, loading };
+    return { watchlist, myReviews, error, loading };
 }
 
 export default useMovieLists;
