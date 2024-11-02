@@ -10,16 +10,6 @@ header {
     z-index: 10;
 }
 
-header ul {
-    list-style: none;
-    display: flex;
-}
-
-header .icon {
-    font-size: 1.5em;
-    margin-left: 10px;
-}
-
 header .logo {
     width: 120px;
 }
