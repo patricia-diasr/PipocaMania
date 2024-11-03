@@ -32,19 +32,27 @@ export async function searchMovies(query) {
     }
 }
 
-export async function getUserMovieLists(user) {
+export async function getUserMovieLists(userId) {
     try {
-        const response = await apiMovieTheater.get(`/users/${user}`);
-        return response.data;
+        const response = await apiMovieTheater.get(`/users.json`);
+        const users = response.data;
+        const user = users.find((user) => user.id === userId);
+
+        return user;
     } catch (error) {
         throw new Error("Error fetching user movie lists");
     }
 }
 
-export async function addMovieReviewList(user, movie) {
+export async function addMovieReviewList(userId, movie) {
     try {
-        const userData = await apiMovieTheater.get(`/users/${user}`);
-        let reviews = userData.data.myReviews;
+        const response = await apiMovieTheater.get(`/users.json`);
+        const users = response.data;
+
+        const userIndex = users.findIndex((user) => user.id === userId);
+        const user = users[userIndex];
+
+        let reviews = user.myReviews || [];
 
         const movieIndex = reviews.findIndex((review) => review.id === movie.id);
 
@@ -54,18 +62,20 @@ export async function addMovieReviewList(user, movie) {
             reviews = [...reviews, movie];
         }
 
-        await apiMovieTheater.patch(`/users/${user}`, {
-            myReviews: reviews,
-        });
+        users[userIndex].myReviews = reviews;
+        await apiMovieTheater.put(`/users.json`, users);
     } catch (error) {
         throw new Error("Error updating user reviews lists");
     }
 }
 
-export async function searchWatchList(user, movieId) {
+export async function searchWatchList(userId, movieId) {
     try {
-        const userData = await apiMovieTheater.get(`/users/${user}`);
-        const list = userData.data.watchlist;
+        const response = await apiMovieTheater.get(`/users.json`);
+        const users = response.data;
+
+        const user = users.find((user) => user.id === userId);
+        const list = user.watchlist;
 
         const isInWatchList = list.find((movie) => movie.id === movieId);
         return isInWatchList;
@@ -74,10 +84,15 @@ export async function searchWatchList(user, movieId) {
     }
 }
 
-export async function addMovieWatchList(user, movie) {
+export async function addMovieWatchList(userId, movie) {
     try {
-        const userData = await apiMovieTheater.get(`/users/${user}`);
-        let watchlist = userData.data.watchlist || [];
+        const response = await apiMovieTheater.get(`/users.json`);
+        const users = response.data;
+
+        const userIndex = users.findIndex((user) => user.id === userId);
+        const user = users[userIndex];
+
+        let watchlist = user.watchlist || [];
 
         const movieIndex = watchlist.findIndex((item) => item.id === movie.id);
 
@@ -87,24 +102,27 @@ export async function addMovieWatchList(user, movie) {
             console.log("Movie already in your watchlist");
         }
 
-        await apiMovieTheater.patch(`/users/${user}`, {
-            watchlist: watchlist,
-        });
+        users[userIndex].watchlist = watchlist;
+
+        await apiMovieTheater.put(`/users.json`, users);
     } catch (error) {
         throw new Error("Error updating watchlist");
     }
 }
 
-export async function removeMovieWatchList(user, movieId) {
+export async function removeMovieWatchList(userId, movieId) {
     try {
-        const userData = await apiMovieTheater.get(`/users/${user}`);
-        let watchlist = userData.data.watchlist || [];
+        const response = await apiMovieTheater.get(`/users.json`);
+        const users = response.data;
 
+        const userIndex = users.findIndex((user) => user.id === userId);
+        const user = users[userIndex];
+
+        let watchlist = user.watchlist || [];
         watchlist = watchlist.filter((movie) => movie.id !== movieId);
 
-        await apiMovieTheater.patch(`/users/${user}`, {
-            watchlist: watchlist,
-        });
+        users[userIndex].watchlist = watchlist;
+        await apiMovieTheater.put(`/users.json`, users);
     } catch (error) {
         throw new Error("Error updating watchlist");
     }

@@ -18,7 +18,7 @@ function useMovieDetails(id) {
 
                 setMovieDetails(details);
                 setMovieCredits(credits);
-                setMovieComments(comments)
+                setMovieComments(comments);
             } catch (err) {
                 setError(err.message);
             } finally {

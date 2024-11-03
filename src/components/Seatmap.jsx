@@ -7,7 +7,7 @@ function Seatmap({ seatingData, onSeatSelect }) {
                 {seatingData.map((row, rowIndex) => (
                     <div key={rowIndex} className={styles.row}>
                         {row.map((seat, seatIndex) =>
-                            seat ? (
+                            seat !== "null" ? (
                                 <div
                                     key={seatIndex}
                                     className={`${styles.seat} ${styles[seat.status]}`}

@@ -9,7 +9,7 @@ export const apiMovies = axios.create({
 });
 
 export const apiMovieTheater = axios.create({
-    baseURL: "http://localhost:3000",
+    baseURL: "https://pipocamania-295c5-default-rtdb.firebaseio.com/",
     timeout: 10000,
     headers: {
         "Content-Type": "application/json",

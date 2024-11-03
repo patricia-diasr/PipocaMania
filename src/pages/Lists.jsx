@@ -22,8 +22,8 @@ function Lists() {
         <div className={styles.lists}>
             <section>
                 <h1>Minhas Listas</h1>
-                <MovieList list={myReviews} title="Minhas avaliaçõoes" />
-                <MovieList list={watchlist} title="Quero assistir" />
+                {myReviews.length > 0 && <MovieList list={myReviews} title="Minhas avaliaçõoes" />}
+                {watchlist.length > 0 && <MovieList list={watchlist} title="Quero assistir" />}
             </section>
         </div>
     );

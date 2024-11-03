@@ -13,8 +13,8 @@ function useMovieLists(user) {
             try {
                 const userData = await getUserMovieLists(user);
 
-                setWatchlist(userData.watchlist);
-                setMyReviews(userData.myReviews);
+                setWatchlist(userData.watchlist || []);
+                setMyReviews(userData.myReviews || []);
             } catch (err) {
                 setError(err.message);
             } finally {

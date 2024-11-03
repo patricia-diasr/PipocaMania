@@ -2,9 +2,8 @@ import { apiMovieTheater } from "./apiClient";
 
 export async function login(loginData) {
     try {
-        const response = await apiMovieTheater.get(`/users`);
+        const response = await apiMovieTheater.get(`/users.json`);
         const usersData = response.data;
-
         const user = usersData.find((user) => user.login === loginData.login);
 
         if (user && user.password === loginData.password) {
@@ -26,27 +25,36 @@ export async function login(loginData) {
 
 export async function signup(signupData) {
     try {
-        const response = await apiMovieTheater.post(`/users`, {
+        const response = await apiMovieTheater.get(`/users.json`);
+        const usersData = response.data || {};
+        const userId = Date.now();
+
+        const newUser = {
+            id: userId,
             name: signupData.name,
             login: signupData.login,
             password: signupData.password,
-            role: "client", 
+            role: "client",
             tickets: [],
             watchlist: [],
-            myReviews: []
-        });
+            myReviews: [],
+        };
 
-        if (response.status === 201) {
+        usersData.push(newUser);
+
+        const updateResponse = await apiMovieTheater.put(`/users.json`, usersData);
+
+        if (updateResponse.status === 200) {
             return {
                 message: "Signup successful",
                 user: {
-                    name: response.data.name,
-                    id: response.data.id,
-                    role: response.data.role,
+                    name: newUser.name,
+                    id: userId,
+                    role: newUser.role,
                 },
             };
         } else {
-            throw new Error("Failed to sign up");
+            throw new Error("Failed to update users");
         }
     } catch (error) {
         throw new Error(`Error during signup: ${error.message}`);

@@ -70,7 +70,7 @@ function MovieCheckout({ screenings, movieName, movieId }) {
             });
 
             if (selectedScreening) {
-                setSelectedSession(selectedScreening.id); // Atualiza o estado selectedSession
+                setSelectedSession(selectedScreening.id); 
                 setSeatingData(selectedScreening.seats || []);
                 setSelectedSeats([]);
             }

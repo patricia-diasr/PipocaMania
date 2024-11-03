@@ -166,9 +166,13 @@ function MovieDetail({ movieId, movieDetails, movieCredits, movieComments }) {
                     </div>
 
                     {isInWatchlist ? (
-                        <BsBookmarkFill className={styles.icon} onClick={toggleWatchlist} style={{ fill: "#f79e44" }} />
+                        <BsBookmarkFill
+                            className={styles.icon}
+                            onClick={toggleWatchlist}
+                            style={{ fill: "#f79e44", cursor: "pointer" }}
+                        />
                     ) : (
-                        <BsBookmark className={styles.icon} onClick={toggleWatchlist} />
+                        <BsBookmark className={styles.icon} onClick={toggleWatchlist} style={{ cursor: "pointer" }} />
                     )}
                 </section>
 

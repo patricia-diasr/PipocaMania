@@ -1,9 +1,12 @@
 import { apiMovieTheater } from "./apiClient";
 
-export async function getCheckout(user) {
+export async function getCheckout(userId) {
     try {
-        const response = await apiMovieTheater.get(`/users/${user}`);
-        let tickets = response.data.tickets;
+        const response = await apiMovieTheater.get(`/users.json`);
+        const usersData = response.data;
+        const user = usersData.find((user) => user.id === userId);
+
+        let tickets = user.tickets;
 
         if (tickets && tickets.length > 0) {
             tickets = tickets.sort((a, b) => {
@@ -18,16 +21,34 @@ export async function getCheckout(user) {
     }
 }
 
-export async function saveCheckout(user, reservation) {
+export async function saveCheckout(userId, reservation) {
     try {
-        const userData = await apiMovieTheater.get(`/users/${user}`);
-        const updatedTickets = [...userData.data.tickets, reservation];
+        const userResponse = await apiMovieTheater.get(`/users.json`);
+        const usersData = userResponse.data || [];
 
-        await apiMovieTheater.patch(`/users/${user}`, {
-            tickets: updatedTickets,
-        });
+        const userIndex = usersData.findIndex((user) => user.id === userId);
+
+        if (userIndex === -1) {
+            throw new Error("User not found");
+        }
+
+        const user = usersData[userIndex];
+
+        const updatedTickets = user.tickets ? [...user.tickets, reservation] : [reservation];
+
+        usersData[userIndex].tickets = updatedTickets;
+
+        const updateResponse = await apiMovieTheater.put(`/users.json`, usersData);
+
+        if (updateResponse.status === 200) {
+            return {
+                message: "Reservation saved successfully",
+            };
+        } else {
+            throw new Error("Failed to update user tickets");
+        }
     } catch (error) {
-        throw new Error("Error submitting reservation");
+        throw new Error(`Error submitting reservation: ${error.message}`);
     }
 }
 
@@ -35,26 +56,30 @@ export async function updateSeatingData(movieId, screeningId, seatingData) {
     try {
         seatingData.forEach((row) => {
             row.forEach((seat) => {
-                if (seat && seat.status === "selected") {
+                if (seat !== "null" && seat.status === "selected") {
                     seat.status = "booked";
                 }
             });
         });
 
-        const movieResponse = await apiMovieTheater.get(`/movies/${movieId}`);
-        const movie = movieResponse.data;
+        const moviesResponse = await apiMovieTheater.get(`/movies.json`);
+        const movies = moviesResponse.data || [];
 
-        const screening = movie.movie_screenings.find((screening) => screening.id === screeningId);
+        const movieIndex = movies.findIndex((movie) => movie.id === movieId);
 
-        if (!screening) {
+        if (movieIndex === -1) {
+            throw new Error("Movie not found");
+        }
+
+        const movie = movies[movieIndex];
+        const screeningIndex = movie.movie_screenings.findIndex((screening) => screening.id === screeningId);
+
+        if (screeningIndex === -1) {
             throw new Error("Screening not found");
         }
 
-        screening.seats = seatingData;
-
-        await apiMovieTheater.patch(`/movies/${movieId}`, {
-            movie_screenings: movie.movie_screenings,
-        });
+        movies[movieIndex].movie_screenings[screeningIndex].seats = seatingData
+        await apiMovieTheater.put(`/movies.json`, movies);
     } catch (error) {
         throw new Error("Error updating seating data: " + error.message);
     }

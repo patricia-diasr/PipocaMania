@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { getMovieScreenings } from "../services/screeningsService";
 
-function useMoviScreenings(id) {
+function useMovieScreenings(id) {
     const [screenings, setScreenings] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -26,4 +26,4 @@ function useMoviScreenings(id) {
     return { screenings, error, loading };
 }
 
-export default useMoviScreenings;
+export default useMovieScreenings;
