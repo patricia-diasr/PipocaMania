@@ -9,12 +9,7 @@ Projeto de Bloco realizado durante bloco de Desenvolvimento Front-end com Framew
    npm install
    ```
    
-2. Iniciar o backend falso:
-   ```
-   npm run backend
-   ```
-
-3. Iniciar o frontend:
+2. Iniciar o projeto:
    ```
    npm run dev
    ```
